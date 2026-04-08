@@ -562,7 +562,9 @@ async function syncFromLaptop(){
   const ss=document.getElementById('sync-status');
   if(!data){
     const base=getLaptopUrl();
-    ss.textContent=base?'📴 Offline mód — helyi adatokkal működik':'⚙️ Állítsd be a laptop IP-t a beállításokban';
+    if(!base){ss.textContent='';} // nincs laptop beállítva, nem kell üzenet
+    else if(navigator.onLine){ss.textContent='📡 Online — laptop nem elérhető (nem baj, minden megy)';}
+    else{ss.textContent='📴 Offline mód — helyi adatokkal működik';}
     return;
   }
   ss.textContent='🔗 Laptop csatlakozva — szinkronizálva';
