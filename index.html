@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#020a14">
+<link rel="manifest" href="manifest.json">
+<title>Morning Briefing</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+body{background:#020a14;color:#cbd5e1;padding:12px;min-height:100vh}
+h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
+.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.hdr-btns{display:flex;gap:6px}
+.clock{font-size:50px;font-weight:800;letter-spacing:5px;text-align:center;color:#e0f2fe;
+       text-shadow:0 0 30px rgba(29,78,216,0.8);line-height:1}
+.date{text-align:center;color:#334155;font-size:13px;margin:4px 0 14px}
+.card{background:#040f1f;border-radius:14px;padding:14px;margin-bottom:10px;
+      border:1px solid #0f2a50}
+.system-card{background:linear-gradient(160deg,#030c1e,#020812);border-radius:14px;
+             padding:14px;margin-bottom:10px;border:2px solid #2563eb;
+             box-shadow:0 0 20px rgba(37,99,235,0.15),inset 0 0 30px rgba(37,99,235,0.05)}
+.sec{color:#2563eb;font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:10px}
+.sys-hdr{color:#1d4ed8;font-size:10px;font-weight:700;letter-spacing:3px;
+         font-family:'Courier New',monospace;margin-bottom:8px}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.wlbl{color:#2563eb;font-size:10px;font-weight:700;letter-spacing:1.5px;margin-bottom:4px}
+.wico{font-size:36px;line-height:1.1}.wtemp{font-size:28px;font-weight:800;color:#e0f2fe}
+.wdesc{color:#64748b;font-size:12px}.wmeta{color:#334155;font-size:10px;margin-top:3px}
+.ev,.task{padding:3px 0 3px 10px;font-size:13px;color:#cbd5e1}
+.ev::before{content:"• ";color:#2563eb}.task.done{color:#1e3a6e;text-decoration:line-through}
+.ev-day,.task-cat{color:#2563eb;font-size:11px;font-weight:700;letter-spacing:1px;
+                  margin-top:8px;margin-bottom:2px;text-transform:uppercase}
+.lvl-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.lvl{font-size:22px;font-weight:800;color:#e0f2fe}
+.rnk{font-size:13px;font-weight:700}.strk{color:#334155;font-size:12px}
+.rank-title{color:#334155;font-size:11px;font-style:italic;margin-bottom:8px}
+.xpbar{background:#020a14;border-radius:5px;height:10px;margin:6px 0 2px;
+       border:1px solid #0f2a50;overflow:hidden}
+.xpfill{height:100%;background:linear-gradient(to right,#1d4ed8,#7c3aed,#2563eb);
+        border-radius:5px;transition:width .8s ease}
+.xptxt{color:#334155;font-size:10px;margin-bottom:10px}
+.qname{color:#2563eb;font-size:14px;font-weight:700;
+       font-family:'Courier New',monospace;margin-bottom:2px}
+.qsub{color:#64748b;font-size:11px;margin-bottom:10px}
+.task-check{display:flex;align-items:center;gap:10px;padding:5px 0;cursor:pointer}
+.task-check input[type=checkbox]{width:20px;height:20px;accent-color:#2563eb;cursor:pointer}
+.task-check.done-task label{color:#1e3a6e;text-decoration:line-through}
+.task-check label{font-size:14px;color:#cbd5e1;cursor:pointer}
+.btn{display:block;width:100%;border:none;border-radius:10px;padding:13px;
+     font-size:14px;font-weight:700;margin-top:12px;cursor:pointer;
+     background:#0a1a3a;color:#3b82f6;border:1px solid #2563eb;
+     font-family:'Courier New',monospace;transition:all .2s}
+.btn:disabled{background:#062717;color:#22c55e;border-color:#16a34a;cursor:default}
+.btn:active:not(:disabled){opacity:.7}
+.ref{background:transparent;color:#60a5fa;border:1px solid #1e3a6e;border-radius:8px;
+     padding:6px 14px;font-size:12px;cursor:pointer}
+.news-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.news-tab-btn{background:#040f1f;color:#4a6fa5;border:1px solid #0f2a50;
+              border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer}
+.news-tab-btn.active{background:#1d4ed8;color:#e0f2fe;border-color:#2563eb}
+.article{background:#040f1f;border-radius:10px;border:1px solid #0f2a50;
+         padding:10px;margin-bottom:8px;cursor:pointer;text-decoration:none;display:block}
+.article:active{background:#071628}
+.art-badge{background:#0a1f3d;color:#60a5fa;border-radius:4px;font-size:10px;
+           font-weight:700;padding:2px 6px;display:inline-block;margin-bottom:4px}
+.art-title{color:#e0f2fe;font-size:13px;font-weight:600;line-height:1.3;margin-bottom:3px}
+.art-desc{color:#334155;font-size:11px;line-height:1.4}
+.main-tabs{display:flex;gap:0;margin-bottom:16px;
+           background:#040f1f;border-radius:10px;padding:4px;border:1px solid #0f2a50}
+.main-tab-btn{flex:1;background:transparent;color:#4a6fa5;border:none;padding:11px 8px;
+              font-size:15px;font-weight:600;cursor:pointer;border-radius:8px;
+              transition:all .2s;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.main-tab-btn.active{background:#1d4ed8;color:#e0f2fe}
+.rec-item{display:flex;align-items:center;gap:12px;padding:10px 0;
+          border-bottom:1px solid #0a1f3d;cursor:pointer}
+.rec-item:last-child{border-bottom:none}
+.rec-item input[type=checkbox]{width:22px;height:22px;accent-color:#2563eb;
+                                cursor:pointer;flex-shrink:0}
+.rec-item label{font-size:15px;color:#cbd5e1;cursor:pointer;line-height:1.3}
+.rec-item.done label{color:#1e3a6e;text-decoration:line-through}
+.task-check input[type=checkbox]{width:20px;height:20px}
+.task-check label{font-size:14px}
+/* Settings panel */
+.settings-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+                   background:rgba(0,0,0,.85);z-index:9998;padding:20px;overflow-y:auto}
+.settings-overlay.open{display:block}
+.settings-card{background:#040f1f;border:1px solid #2563eb;border-radius:14px;
+               padding:20px;max-width:400px;margin:40px auto}
+.settings-card h2{color:#e0f2fe;font-size:16px;margin-bottom:16px}
+.settings-card label{color:#60a5fa;font-size:12px;font-weight:700;letter-spacing:1px;
+                      display:block;margin-bottom:4px}
+.settings-card input{width:100%;background:#020a14;color:#e0f2fe;border:1px solid #0f2a50;
+                      border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:14px}
+.settings-card input:focus{outline:none;border-color:#2563eb}
+.settings-card .note{color:#334155;font-size:11px;margin-top:-10px;margin-bottom:14px}
+.conn-status{padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;
+             text-align:center;margin-bottom:14px}
+.conn-ok{background:#062717;color:#22c55e;border:1px solid #16a34a}
+.conn-fail{background:#2a0a0a;color:#f87171;border:1px solid #ef4444}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>🌅 Morning Briefing</h1>
+  <div class="hdr-btns">
+    <button class="ref" onclick="loadCurrentTab()">🔄</button>
+    <button class="ref" onclick="openSettings()">⚙️</button>
+  </div>
+</div>
+<div class="main-tabs">
+  <button class="main-tab-btn active" id="mtab-morning" onclick="switchTab('morning')">🌄 Reggeli</button>
+  <button class="main-tab-btn" id="mtab-news" onclick="switchTab('news')">📡 Hírek</button>
+</div>
+
+<!-- ═══ REGGELI FÜL ═══ -->
+<div id="tab-morning">
+<div id="greeting" style="text-align:center;font-size:18px;font-weight:700;color:#60a5fa;margin-bottom:8px"></div>
+<div class="clock" id="clk">--:--:--</div>
+<div class="date" id="dat">...</div>
+<div id="sync-status" style="text-align:center;font-size:10px;color:#334155;margin-bottom:8px"></div>
+
+<div class="card">
+  <div class="sec">☁ IDŐJÁRÁS — BUDAPEST</div>
+  <div class="wgrid" id="weather"><div style="color:#334155">Betöltés...</div></div>
+</div>
+
+<div class="card" id="cal-card">
+  <div class="sec">📅 NAPTÁR — iPHONE</div>
+  <div id="cal"><div style="color:#334155">Betöltés...</div></div>
+</div>
+
+<div class="card">
+  <div class="sec">✅ TEENDŐK</div>
+  <div id="tasks"><div style="color:#334155">Betöltés...</div></div>
+</div>
+
+<div class="card">
+  <div class="sec">📋 NAPI FELADATOK</div>
+  <div id="recurring"><div style="color:#334155">Betöltés...</div></div>
+</div>
+
+<div class="system-card">
+  <div class="sys-hdr">[ SYSTEM NOTIFICATION ]</div>
+  <div id="solo"><div style="color:#334155">Betöltés...</div></div>
+</div>
+</div>
+
+<!-- ═══ HÍREK FÜL ═══ -->
+<div id="tab-news" style="display:none">
+<div class="card" style="margin-top:4px">
+  <div class="news-tabs" id="news-tabs"></div>
+  <div id="news-content"><div style="color:#334155">Betöltés...</div></div>
+</div>
+</div>
+
+<!-- ═══ BEÁLLÍTÁSOK ═══ -->
+<div class="settings-overlay" id="settings-overlay">
+<div class="settings-card">
+  <h2>⚙️ Beállítások</h2>
+  <div id="conn-indicator" class="conn-status conn-fail">📴 Nincs laptop kapcsolat</div>
+  <label>LAPTOP IP CÍM</label>
+  <input type="text" id="set-ip" placeholder="pl. 192.168.1.42">
+  <div class="note">A laptop helyi WiFi IP-je. Morning Briefing fut rajta (port 5050).</div>
+  <label>PORT</label>
+  <input type="number" id="set-port" value="5050" placeholder="5050">
+  <button class="btn" onclick="testConnection()" style="margin-bottom:10px">🔍 Kapcsolat tesztelése</button>
+  <button class="btn" onclick="saveSettings()" style="background:#062717;color:#22c55e;border-color:#16a34a">💾 Mentés</button>
+  <button class="btn" onclick="closeSettings()" style="margin-top:8px;background:transparent;color:#64748b;border-color:#1e3a6e">Bezárás</button>
+  <div style="margin-top:20px;border-top:1px solid #0f2a50;padding-top:14px">
+    <label>ADATOK</label>
+    <button class="btn" onclick="exportData()" style="font-size:12px;padding:8px">📤 Adatok exportálása</button>
+    <button class="btn" onclick="if(confirm('Biztos törlöd az összes helyi adatot?')){localStorage.clear();location.reload();}" style="font-size:12px;padding:8px;color:#f87171;border-color:#ef4444;margin-top:6px">🗑 Helyi adatok törlése</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+//  STANDALONE PWA — KÜLSŐ SZERVEREN FUT, LAPTOP NÉLKÜL IS MŰKÖDIK
+// ═══════════════════════════════════════════════════════════════════
+
+// ── KONSTANSOK ──
+const DAYS=["Hétfő","Kedd","Szerda","Csütörtök","Péntek","Szombat","Vasárnap"];
+const MONTHS=["január","február","március","április","május","június","július","augusztus","szeptember","október","november","december"];
+const NEWS_CATS=["Magyar politika","Globális politika","Általános hírek","Film & sorozat","Játék"];
+const NEWS_ICONS=["🇭🇺","🌍","📰","🎬","🎮"];
+const METEO_URL="https://api.open-meteo.com/v1/forecast?latitude=47.4979&longitude=19.0402&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,apparent_temperature&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=precipitation_probability&timezone=Europe%2FBudapest&forecast_days=2";
+
+const WMO={0:["☀️","Derült égbolt"],1:["🌤️","Főként derült"],2:["⛅","Részben felhős"],3:["☁️","Borult"],45:["🌫️","Köd"],48:["🌫️","Dérköd"],51:["🌦️","Gyenge szemerkélés"],53:["🌦️","Szemerkélés"],55:["🌦️","Erős szemerkélés"],61:["🌧️","Gyenge eső"],63:["🌧️","Mérsékelt eső"],65:["🌧️","Erős eső"],71:["❄️","Gyenge hóesés"],73:["❄️","Mérsékelt hóesés"],75:["❄️","Erős hóesés"],77:["🌨️","Hópelyhek"],80:["🌧️","Zápor"],81:["🌧️","Mérsékelt zápor"],82:["⛈️","Erős zápor"],85:["🌨️","Havazás"],86:["🌨️","Erős havazás"],95:["⛈️","Zivatar"],96:["⛈️","Zivatar jégesővel"],99:["⛈️","Erős zivatar jégesővel"]};
+function wmoCode(code){return WMO[code]||["🌡️","Kód: "+code];}
+
+const BASE_TASKS=["100 fekvőtámasz","100 guggolás","100 hasizom","2 km futás (minimum)"];
+const DAILY_EXTRA={
+  0:{name:"⚔  ERŐNLÉTI NAP",quest:"Konditerem Protokoll",xp:200,extra:["3 km extra futás","10 perc plank"],diff:"★★★☆☆"},
+  1:{name:"🏃  SPRINT NAP",quest:"Gyorsaság Protokoll",xp:180,extra:["Sprintek: 10×100m","30 perc kardió"],diff:"★★★☆☆"},
+  2:{name:"🛡  KITARTÁS NAP",quest:"Iron Will Protokoll",xp:220,extra:["200 ugrókötél","50 burpee","Hideg zuhany"],diff:"★★★★☆"},
+  3:{name:"🧠  ELME NAP",quest:"Mental Fortress Protokoll",xp:160,extra:["30 perc meditáció","Napló írás","Könyv: 1 fejezet"],diff:"★★☆☆☆"},
+  4:{name:"☠  BOSS NAP",quest:"Shadow Monarch Protokoll",xp:350,extra:["5 km extra futás","50 burpee","Hideg zuhany","30 perc meditáció"],diff:"★★★★★"}
+};
+const SL_RANKS=[[0,"E","#9ca3af","Gyenge Vadász"],[500,"D","#22c55e","Bronz Vadász"],[1500,"C","#3b82f6","Ezüst Vadász"],[3500,"B","#a855f7","Arany Vadász"],[7500,"A","#f59e0b","Nemzeti Szintű Vadász"],[15000,"S","#ef4444","Különleges Osztályú Vadász"],[35000,"MONARCH","#818cf8","Árnyékok Monarchája"]];
+
+let currentNews=0, currentTab='morning', laptopAvailable=false;
+
+// ── localStorage SEGÉDFÜGGVÉNYEK ──
+function LS(key,def){try{const v=localStorage.getItem('mb_'+key);return v?JSON.parse(v):def;}catch(e){return def;}}
+function LSset(key,val){try{localStorage.setItem('mb_'+key,JSON.stringify(val));}catch(e){}}
+function todayKey(){return new Date().toISOString().slice(0,10);}
+
+// ── LAPTOP URL ──
+function getLaptopUrl(){
+  const ip=LS('laptop_ip','');const port=LS('laptop_port',5050);
+  if(!ip)return null;
+  return 'http://'+ip+':'+port;
+}
+
+// ── SOLO LEVELING SZÁMÍTÁSOK ──
+function slLevel(xp){let lvl=1,acc=0;while(true){const need=lvl*200;if(xp<acc+need)return[lvl,xp-acc,need];acc+=need;lvl++;}}
+function slRank(xp){let r="E",c="#9ca3af",t="Gyenge Vadász";for(const[thr,name,col,title]of SL_RANKS){if(xp>=thr){r=name;c=col;t=title;}}return[r,c,t];}
+
+function loadSoloLocal(){
+  let p=LS('solo',{total_xp:0,streak:0,last_completed:null,completed_today:false,task_checks:{}});
+  const tk=todayKey();
+  if(p.last_completed && p.last_completed<tk){
+    p.completed_today=false;
+    const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+    if(p.last_completed<yesterday.toISOString().slice(0,10))p.streak=0;
+  }
+  const wd=new Date().getDay();const dayIdx=(wd===0)?6:wd-1;
+  if(dayIdx>=5)return p;
+  const tasks=[...BASE_TASKS,...DAILY_EXTRA[dayIdx].extra];
+  if(!p.task_checks[tk])p.task_checks[tk]=new Array(tasks.length).fill(false);
+  return p;
+}
+
+function loadRecurringLocal(){
+  const d=LS('recurring',{});const tk=todayKey();
+  if(!d[tk])d[tk]={medicine:false,mom_call:false};
+  return d;
+}
+
+function loadTasksLocal(){return LS('tasks',[]);}
+
+// ── ÜDVÖZLÉS ──
+function showGreeting(){
+  const h=new Date().getHours();let msg;
+  if(h>=6&&h<11)msg="🌅 Jó reggelt, Ákos!";
+  else if(h>=11&&h<18)msg="☀️ Szép napot, Ákos!";
+  else if(h>=18&&h<22)msg="🌆 Jó estét, Ákos!";
+  else msg="🌙 Jó éjszakát, Ákos!";
+  document.getElementById('greeting').textContent=msg;
+}
+
+// ── ÓRA ──
+function tick(){
+  const n=new Date();
+  document.getElementById("clk").textContent=n.toTimeString().slice(0,8);
+  const dw=n.getDay();
+  document.getElementById("dat").textContent=DAYS[dw===0?6:dw-1]+", "+n.getFullYear()+". "+MONTHS[n.getMonth()]+" "+n.getDate()+".";
+}
+setInterval(tick,1000);tick();
+
+// ── TAB NAVIGÁCIÓ ──
+function switchTab(name){
+  currentTab=name;
+  document.getElementById('tab-morning').style.display=(name==='morning')?'block':'none';
+  document.getElementById('tab-news').style.display=(name==='news')?'block':'none';
+  document.getElementById('mtab-morning').className='main-tab-btn'+(name==='morning'?' active':'');
+  document.getElementById('mtab-news').className='main-tab-btn'+(name==='news'?' active':'');
+  if(name==='news'){buildNewsTabs();loadNews(currentNews);}
+}
+function loadCurrentTab(){
+  if(currentTab==='morning'){loadWeather();loadCal();loadTasks();loadRecurring();loadSolo();}
+  else{loadNews(currentNews);}
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  IDŐJÁRÁS — KÖZVETLEN OPEN-METEO (laptop NEM kell)
+// ═══════════════════════════════════════════════════════════════════
+async function loadWeather(){
+  try{
+    const d=await(await fetch(METEO_URL)).json();
+    const cur=d.current;const daily=d.daily;
+    const[ico,desc]=wmoCode(cur.weather_code);
+    const[ico2,desc2]=wmoCode(daily.weather_code[1]);
+    let precipHtml='';
+    try{
+      const htimes=d.hourly.time;const hprob=d.hourly.precipitation_probability;
+      const nowH=new Date();nowH.setMinutes(0);nowH.setSeconds(0);nowH.setMilliseconds(0);
+      const parts=[];
+      for(let i=0;i<3;i++){
+        const t=new Date(nowH.getTime()+i*3600000);
+        const localTs=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')+'T'+String(t.getHours()).padStart(2,'0')+':00';
+        const idx=htimes.indexOf(localTs);
+        if(idx>=0)parts.push('<b>'+String(t.getHours()).padStart(2,'0')+':00</b> '+hprob[idx]+'%');
+      }
+      if(parts.length)precipHtml='<div style="color:#60a5fa;font-size:11px;margin-top:5px;">🌧 Csapadék: '+parts.join('  ')+'</div>';
+    }catch(e){}
+    let h='<div><div class="wlbl">📅 MA</div><div class="wico">'+ico+'</div><div class="wtemp">'+cur.temperature_2m.toFixed(1)+'°C</div><div class="wdesc">'+desc+'</div><div class="wmeta">Érzett '+cur.apparent_temperature.toFixed(0)+'° · '+cur.relative_humidity_2m+'% · '+cur.wind_speed_10m.toFixed(1)+' km/h</div>'+precipHtml+'</div>';
+    h+='<div><div class="wlbl">📅 HOLNAP</div><div class="wico">'+ico2+'</div><div class="wtemp">'+daily.temperature_2m_max[1].toFixed(0)+'° / '+daily.temperature_2m_min[1].toFixed(0)+'°</div><div class="wdesc">'+desc2+'</div></div>';
+    document.getElementById("weather").innerHTML=h;
+    LSset('weather_cache',{html:h,ts:Date.now()});
+  }catch(e){
+    const cache=LS('weather_cache',null);
+    if(cache&&cache.html){document.getElementById("weather").innerHTML=cache.html+'<div style="color:#f59e0b;font-size:10px;margin-top:4px;">⚠ Cached adat</div>';}
+    else{document.getElementById("weather").innerHTML='<div style="color:#334155">Időjárás nem elérhető</div>';}
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  NAPTÁR — laptopról jön (AppleScript), cache-elt offline
+// ═══════════════════════════════════════════════════════════════════
+async function loadCal(){
+  const card=document.getElementById("cal-card");
+  const base=getLaptopUrl();
+  if(laptopAvailable&&base){
+    try{
+      const d=await(await fetch(base+"/api/calendar")).json();
+      let h='';
+      for(const[lbl,evts]of Object.entries(d)){
+        if(evts.length>0){h+='<div class="ev-day">'+lbl+'</div>';evts.forEach(e=>h+='<div class="ev">'+e+'</div>');}
+      }
+      if(!h){card.style.display='none';}else{card.style.display='block';document.getElementById("cal").innerHTML=h;LSset('cal_cache',{html:h,ts:Date.now()});}
+      return;
+    }catch(e){}
+  }
+  const cache=LS('cal_cache',null);
+  if(cache&&cache.html){document.getElementById("cal").innerHTML=cache.html;card.style.display='block';}
+  else{card.style.display='none';}
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  TEENDŐK — localStorage + laptop sync
+// ═══════════════════════════════════════════════════════════════════
+async function loadTasks(){
+  let items=loadTasksLocal();
+  const base=getLaptopUrl();
+  if(laptopAvailable&&base){
+    try{const d=await(await fetch(base+"/api/tasks")).json();items=d;LSset('tasks',d);}catch(e){}
+  }
+  let h='',ti=0;
+  items.forEach(i=>{
+    if(i.type==='cat')h+='<div class="task-cat">'+i.text+'</div>';
+    else{
+      const idx=ti++;const chk=i.done;
+      h+='<div class="task-check'+(chk?' done-task':'')+'"><input type="checkbox" id="ttc'+idx+'" '+(chk?'checked':'')+' onchange="checkTxt('+idx+',this.checked)"><label for="ttc'+idx+'">'+i.text+'</label></div>';
+    }
+  });
+  if(items.length===0)h='<div style="color:#1e3a6e;font-size:12px;">Nincs teendő</div>';
+  document.getElementById("tasks").innerHTML=h;
+}
+
+async function checkTxt(idx,checked){
+  const items=loadTasksLocal();let ti=0;
+  for(let i=0;i<items.length;i++){
+    if(items[i].type!=='cat'){if(ti===idx){items[i].done=checked;break;}ti++;}
+  }
+  LSset('tasks',items);
+  const base=getLaptopUrl();
+  if(laptopAvailable&&base){
+    try{await fetch(base+"/api/tasks/check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({idx,checked})});}catch(e){}
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  NAPI FELADATOK (recurring) — localStorage
+// ═══════════════════════════════════════════════════════════════════
+function loadRecurring(){
+  const wd=new Date().getDay();const dayIdx=(wd===0)?6:wd-1;
+  const el=document.getElementById("recurring");
+  if(dayIdx>=5){el.innerHTML='<div style="color:#334155;padding:8px 0;">🌙 Hétvége — pihenő nap</div>';return;}
+  const d=loadRecurringLocal();const tk=todayKey();const checks=d[tk]||{medicine:false,mom_call:false};
+  let h='';
+  h+='<div class="rec-item'+(checks.medicine?' done':'')+'"><input type="checkbox" id="med" '+(checks.medicine?'checked':'')+' onchange="checkRec(\'medicine\',this.checked)"><label for="med">💊 Reggeli gyógyszer bevétele (8:00)</label></div>';
+  h+='<div class="rec-item'+(checks.mom_call?' done':'')+'"><input type="checkbox" id="mom" '+(checks.mom_call?'checked':'')+' onchange="checkRec(\'mom_call\',this.checked)"><label for="mom">📞 Anya felhívása (18:00 – 23:00)</label></div>';
+  el.innerHTML=h;
+}
+
+async function checkRec(key,val){
+  const d=loadRecurringLocal();const tk=todayKey();
+  if(!d[tk])d[tk]={medicine:false,mom_call:false};
+  d[tk][key]=val;LSset('recurring',d);
+  const base=getLaptopUrl();
+  if(laptopAvailable&&base){
+    try{await fetch(base+"/api/recurring/check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({[key]:val})});}catch(e){}
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  SOLO LEVELING — localStorage
+// ═══════════════════════════════════════════════════════════════════
+function renderSolo(){
+  const el=document.getElementById("solo");
+  const wd=new Date().getDay();const dayIdx=(wd===0)?6:wd-1;
+  if(dayIdx>=5){el.innerHTML='<div style="color:#334155;font-family:Courier New">🌙 HÉTVÉGE — Pihenő nap</div>';return;}
+  const p=loadSoloLocal();const ch=DAILY_EXTRA[dayIdx];
+  const tasks=[...BASE_TASKS,...ch.extra];
+  const[lvl,cur,need]=slLevel(p.total_xp);const[rank,rcol,rtitle]=slRank(p.total_xp);
+  const tk=todayKey();const checks=p.task_checks[tk]||new Array(tasks.length).fill(false);
+  const completed=p.completed_today;
+  let h='<div class="lvl-row"><span class="lvl">Szint '+lvl+'</span><span class="rnk" style="color:'+rcol+'">'+rank+' Rang</span><span class="strk">🔥 '+p.streak+' nap</span></div>';
+  h+='<div class="rank-title">'+rtitle+'</div>';
+  h+='<div class="xpbar"><div class="xpfill" style="width:'+Math.round(need?cur/need*100:0)+'%"></div></div>';
+  h+='<div class="xptxt">'+p.total_xp.toLocaleString()+' XP összesen · '+cur+'/'+need+' XP következő szintig</div>';
+  h+='<div class="qname">'+ch.name+'</div>';
+  h+='<div class="qsub">'+ch.quest+'  '+ch.diff+'  <span style="color:#f59e0b">+'+ch.xp+' XP</span></div>';
+  tasks.forEach((t,i)=>{
+    const chk=checks[i]||completed;
+    h+='<div class="task-check'+(chk?' done-task':'')+'"><input type="checkbox" id="tc'+i+'" '+(chk||completed?'checked disabled':'')+(completed?' disabled':'')+' onchange="checkTask('+i+',this.checked)"><label for="tc'+i+'">'+t+'</label></div>';
+  });
+  if(completed){h+='<button class="btn" disabled>[ ✓ KÜLDETÉS TELJESÍTVE ] — Visszatér holnap...</button>';}
+  else{h+='<button class="btn" id="solo-complete-btn" onclick="completeQ()">[ ⚔ KÜLDETÉS LEZÁRÁSA ] (+'+ch.xp+' XP)</button>';}
+  el.innerHTML=h;
+}
+function loadSolo(){renderSolo();}
+
+async function checkTask(idx,checked){
+  const p=loadSoloLocal();const tk=todayKey();
+  const wd=new Date().getDay();const dayIdx=(wd===0)?6:wd-1;
+  if(dayIdx>=5)return;
+  const tasks=[...BASE_TASKS,...DAILY_EXTRA[dayIdx].extra];
+  if(!p.task_checks[tk])p.task_checks[tk]=new Array(tasks.length).fill(false);
+  if(idx<p.task_checks[tk].length)p.task_checks[tk][idx]=checked;
+  LSset('solo',p);
+  const cbs=[...document.querySelectorAll('[id^="tc"]')];
+  if(cbs.length>0&&cbs.every(cb=>cb.checked)){
+    const btn=document.getElementById("solo-complete-btn");
+    if(btn){btn.style.background='#062717';btn.style.color='#22c55e';btn.style.borderColor='#16a34a';}
+  }
+  const base=getLaptopUrl();
+  if(laptopAvailable&&base){
+    try{await fetch(base+"/api/solo/check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({idx,checked})});}catch(e){}
+  }
+}
+
+async function completeQ(){
+  const p=loadSoloLocal();const wd=new Date().getDay();const dayIdx=(wd===0)?6:wd-1;
+  if(dayIdx>=5||p.completed_today)return;
+  const ch=DAILY_EXTRA[dayIdx];const tasks=[...BASE_TASKS,...ch.extra];
+  p.total_xp+=ch.xp;p.completed_today=true;
+  p.last_completed=todayKey();p.streak=(p.streak||0)+1;
+  p.task_checks[todayKey()]=new Array(tasks.length).fill(true);
+  LSset('solo',p);renderSolo();
+  const base=getLaptopUrl();
+  if(laptopAvailable&&base){
+    try{await fetch(base+"/api/solo/complete",{method:"POST"});}catch(e){}
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  HÍREK — laptopról jön (RSS), cache offline
+// ═══════════════════════════════════════════════════════════════════
+async function loadNews(idx){
+  currentNews=idx;
+  document.querySelectorAll('.news-tab-btn').forEach((b,i)=>{b.className='news-tab-btn'+(i===idx?' active':'');});
+  const el=document.getElementById("news-content");
+  const base=getLaptopUrl();
+  if(laptopAvailable&&base){
+    el.innerHTML='<div style="color:#334155">⏳ Betöltés...</div>';
+    try{
+      const d=await(await fetch(base+"/api/news/"+encodeURIComponent(NEWS_CATS[idx]))).json();
+      let h='';
+      d.forEach(a=>{h+='<a class="article" href="'+a.link+'" target="_blank"><div class="art-badge">'+a.source+'</div><div class="art-title">'+a.title+'</div>'+(a.summary?'<div class="art-desc">'+a.summary+'</div>':'')+'</a>';});
+      const html=h||'<div style="color:#334155">Nincs cikk</div>';
+      el.innerHTML=html;LSset('news_cache_'+idx,{html:html,ts:Date.now()});
+      return;
+    }catch(e){}
+  }
+  const cache=LS('news_cache_'+idx,null);
+  if(cache&&cache.html){el.innerHTML=cache.html+'<div style="color:#f59e0b;font-size:10px;margin-top:6px;">⚠ Cached</div>';}
+  else{el.innerHTML='<div style="color:#334155">📡 Hírek csak laptop kapcsolattal elérhetőek</div>';}
+}
+function buildNewsTabs(){
+  const c=document.getElementById("news-tabs");c.innerHTML='';
+  NEWS_CATS.forEach((cat,i)=>{
+    const b=document.createElement('button');b.className='news-tab-btn'+(i===currentNews?' active':'');
+    b.textContent=NEWS_ICONS[i]+' '+cat.split(' ')[0];b.onclick=()=>loadNews(i);c.appendChild(b);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  SZINKRONIZÁCIÓ — laptop ↔ telefon
+// ═══════════════════════════════════════════════════════════════════
+async function checkLaptop(){
+  const base=getLaptopUrl();
+  if(!base){laptopAvailable=false;return null;}
+  try{
+    const r=await fetch(base+"/api/sync/pull",{signal:AbortSignal.timeout(3000)});
+    if(!r.ok)throw new Error();
+    laptopAvailable=true;return await r.json();
+  }catch(e){laptopAvailable=false;return null;}
+}
+
+async function syncFromLaptop(){
+  const data=await checkLaptop();
+  const ss=document.getElementById('sync-status');
+  if(!data){
+    const base=getLaptopUrl();
+    ss.textContent=base?'📴 Offline mód — helyi adatokkal működik':'⚙️ Állítsd be a laptop IP-t a beállításokban';
+    return;
+  }
+  ss.textContent='🔗 Laptop csatlakozva — szinkronizálva';
+  setTimeout(()=>{ss.textContent='';},3000);
+  if(data.solo)LSset('solo',data.solo);
+  if(data.recurring){
+    const d=loadRecurringLocal();const tk=todayKey();d[tk]=data.recurring;LSset('recurring',d);
+  }
+  if(data.tasks)LSset('tasks',data.tasks);
+  if(data.calendar){
+    let h='';
+    for(const[lbl,evts]of Object.entries(data.calendar)){
+      if(evts.length>0){h+='<div class="ev-day">'+lbl+'</div>';evts.forEach(e=>h+='<div class="ev">'+e+'</div>');}
+    }
+    if(h)LSset('cal_cache',{html:h,ts:Date.now()});
+  }
+}
+
+async function pushToLaptop(){
+  const base=getLaptopUrl();
+  if(!laptopAvailable||!base)return;
+  try{
+    const p=loadSoloLocal();const d=loadRecurringLocal();const tk=todayKey();
+    const wd=new Date().getDay();const dayIdx=(wd===0)?6:wd-1;
+    const payload={recurring:d[tk]||{medicine:false,mom_call:false}};
+    if(dayIdx<5){
+      payload.solo_checks=p.task_checks[tk]||[];
+      if(p.completed_today)payload.solo_complete=true;
+    }
+    const items=loadTasksLocal();const taskChecks=[];let ti=0;
+    items.forEach(i=>{if(i.type!=='cat'&&i.checkable!==false){taskChecks.push({idx:ti,checked:!!i.done});ti++;}});
+    if(taskChecks.length)payload.task_checks=taskChecks;
+    await fetch(base+"/api/sync/push",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  ÉRTESÍTÉS RENDSZER — TELEFONON ÖNÁLLÓAN
+// ═══════════════════════════════════════════════════════════════════
+if('Notification' in window && Notification.permission==='default'){
+  Notification.requestPermission();
+}
+
+function phoneNotify(title,body){
+  if('Notification' in window && Notification.permission==='granted'){
+    new Notification(title,{body:body,tag:title+Date.now()});
+  }
+  if(navigator.vibrate)navigator.vibrate([200,100,200]);
+  showBanner(title+': '+body);
+}
+
+function showBanner(msg){
+  const d=document.createElement('div');
+  d.style.cssText='position:fixed;top:0;left:0;right:0;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;padding:14px 16px;font-size:14px;font-weight:600;z-index:9999;text-align:center';
+  d.textContent=msg;d.onclick=()=>d.remove();
+  document.body.appendChild(d);
+  setTimeout(()=>{if(d.parentNode)d.remove();},8000);
+}
+
+function checkPhoneReminders(){
+  const now=new Date();const h=now.getHours();const m=now.getMinutes();
+  const tk=todayKey();const sent=LS('notif_sent_'+tk,[]);
+  const wd=now.getDay();const dayIdx=(wd===0)?6:wd-1;
+  let changed=false;
+
+  if(h===6&&m<2&&!sent.includes('morning_6')){
+    phoneNotify('🌅 Jó reggelt, Ákos','Új nap, új kihívások. Nézd meg a mai teendőidet!');
+    sent.push('morning_6');changed=true;
+  }
+  if(dayIdx<5&&h===8&&m<2&&!sent.includes('med_8')){
+    const d=loadRecurringLocal();const checks=d[tk]||{};
+    if(!checks.medicine){phoneNotify('💊 Reggeli gyógyszer','Ne felejtsd el bevenni a reggeli gyógyszert!');sent.push('med_8');changed=true;}
+  }
+  if(dayIdx<5&&h===18&&m<2&&!sent.includes('mom_18')){
+    const d=loadRecurringLocal();const checks=d[tk]||{};
+    if(!checks.mom_call){phoneNotify('📞 Anya felhívása','18:00 – 23:00 között hívd fel anyát!');sent.push('mom_18');changed=true;}
+  }
+  if(dayIdx<5&&h===22&&m<2&&!sent.includes('eod_22')){
+    const missing=[];
+    const d=loadRecurringLocal();const checks=d[tk]||{};
+    if(!checks.medicine)missing.push('Gyógyszer');
+    if(!checks.mom_call)missing.push('Anya felhívása');
+    const p=loadSoloLocal();
+    if(!p.completed_today)missing.push('Solo Leveling küldetés');
+    if(missing.length){phoneNotify('⚠ Nap vége közeleg','Hátravan: '+missing.join(', '));sent.push('eod_22');changed=true;}
+  }
+  if(changed)LSset('notif_sent_'+tk,sent);
+}
+
+async function pollAlerts(){
+  const base=getLaptopUrl();
+  if(!laptopAvailable||!base)return;
+  try{
+    const alerts=await(await fetch(base+"/api/alerts")).json();
+    alerts.forEach(a=>{phoneNotify(a.title,a.body);});
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  BEÁLLÍTÁSOK
+// ═══════════════════════════════════════════════════════════════════
+function openSettings(){
+  document.getElementById('settings-overlay').classList.add('open');
+  document.getElementById('set-ip').value=LS('laptop_ip','');
+  document.getElementById('set-port').value=LS('laptop_port',5050);
+  updateConnIndicator();
+}
+function closeSettings(){document.getElementById('settings-overlay').classList.remove('open');}
+
+function saveSettings(){
+  const ip=document.getElementById('set-ip').value.trim();
+  const port=parseInt(document.getElementById('set-port').value)||5050;
+  LSset('laptop_ip',ip);LSset('laptop_port',port);
+  showBanner('💾 Beállítások mentve!');
+  closeSettings();
+  syncFromLaptop().then(()=>{loadCurrentTab();});
+}
+
+async function testConnection(){
+  const ip=document.getElementById('set-ip').value.trim();
+  const port=parseInt(document.getElementById('set-port').value)||5050;
+  if(!ip){showBanner('⚠ Adj meg egy IP címet!');return;}
+  const ind=document.getElementById('conn-indicator');
+  ind.className='conn-status conn-fail';ind.textContent='🔄 Tesztelés...';
+  try{
+    const r=await fetch('http://'+ip+':'+port+'/api/sync/pull',{signal:AbortSignal.timeout(4000)});
+    if(r.ok){ind.className='conn-status conn-ok';ind.textContent='✅ Laptop elérhető!';}
+    else throw new Error();
+  }catch(e){ind.className='conn-status conn-fail';ind.textContent='❌ Nem elérhető — ellenőrizd az IP-t és hogy fut-e a laptop app';}
+}
+
+function updateConnIndicator(){
+  const ind=document.getElementById('conn-indicator');
+  if(laptopAvailable){ind.className='conn-status conn-ok';ind.textContent='✅ Laptop csatlakozva';}
+  else{ind.className='conn-status conn-fail';ind.textContent='📴 Nincs laptop kapcsolat';}
+}
+
+function exportData(){
+  const data={solo:LS('solo',{}),recurring:LS('recurring',{}),tasks:LS('tasks',[]),
+              laptop_ip:LS('laptop_ip',''),laptop_port:LS('laptop_port',5050)};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='morning_briefing_backup_'+todayKey()+'.json';a.click();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  SERVICE WORKER REGISZTRÁCIÓ
+// ═══════════════════════════════════════════════════════════════════
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  INDÍTÁS
+// ═══════════════════════════════════════════════════════════════════
+async function loadAll(){
+  showGreeting();
+  await syncFromLaptop();
+  await loadWeather();
+  loadCal();loadTasks();loadRecurring();loadSolo();
+  buildNewsTabs();
+  if(currentTab==='news')loadNews(currentNews);
+}
+loadAll();
+
+setInterval(()=>{loadCurrentTab();},300000);
+setInterval(checkPhoneReminders,60000);
+setInterval(()=>{syncFromLaptop().then(()=>{pushToLaptop();});},120000);
+setInterval(pollAlerts,30000);
+</script>
+</body>
+</html>
