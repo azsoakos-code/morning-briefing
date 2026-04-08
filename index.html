@@ -742,10 +742,33 @@ async function refreshAll(){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  SERVICE WORKER REGISZTRÁCIÓ
+//  SERVICE WORKER — AUTOMATIKUS FRISSÍTÉS
 // ═══════════════════════════════════════════════════════════════════
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
+  navigator.serviceWorker.register('sw.js').then(reg=>{
+    // Azonnal ellenőrzi az új verziót
+    reg.update().catch(()=>{});
+    // Ha új SW verzió érkezett, automatikusan aktiválja
+    reg.addEventListener('updatefound',()=>{
+      const newSW=reg.installing;
+      if(!newSW)return;
+      newSW.addEventListener('statechange',()=>{
+        if(newSW.state==='installed'&&navigator.serviceWorker.controller){
+          // Új verzió kész — aktiválás és újratöltés
+          newSW.postMessage('skipWaiting');
+        }
+      });
+    });
+    // 30 percenként ellenőrzi az új verziót
+    setInterval(()=>{reg.update().catch(()=>{});},1800000);
+  }).catch(()=>{});
+  // Ha az új SW átvette az irányítást, újratöltjük az oldalt
+  let refreshing=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(refreshing)return;
+    refreshing=true;
+    window.location.reload();
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════════

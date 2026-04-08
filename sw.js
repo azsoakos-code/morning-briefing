@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mb-v3';
+const CACHE_NAME = 'mb-v4';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
@@ -15,24 +15,31 @@ self.addEventListener('activate', e => {
   );
 });
 
+self.addEventListener('message', e => {
+  if (e.data === 'skipWaiting') self.skipWaiting();
+});
+
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
-  // Open-Meteo and laptop API calls: network-first, no cache
+
+  // External API calls (Open-Meteo, rss2json, laptop): network only
   if (url.hostname !== location.hostname) {
     e.respondWith(fetch(e.request).catch(() => new Response('{"error":"offline"}', {
       headers: {'Content-Type': 'application/json'}
     })));
     return;
   }
-  // App shell: cache-first, then network
+
+  // App shell: NETWORK-FIRST (always get latest when online, cache as offline backup)
   e.respondWith(
-    caches.match(e.request).then(cached => {
-      const fetchPromise = fetch(e.request).then(response => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-        return response;
-      }).catch(() => cached);
-      return cached || fetchPromise;
-    })
+    fetch(e.request).then(response => {
+      const clone = response.clone();
+      caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+      return response;
+    }).catch(() => caches.match(e.request).then(cached => {
+      return cached || new Response('<h1>Offline</h1><p>Nincs internetkapcsolat és nincs cached verzió.</p>', {
+        headers: {'Content-Type': 'text/html; charset=utf-8'}
+      });
+    }))
   );
 });
