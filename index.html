@@ -489,7 +489,8 @@ async function checkLaptop(){
   const base=getLaptopUrl();
   if(!base){laptopAvailable=false;return null;}
   try{
-    const r=await fetch(base+"/api/sync/pull",{signal:AbortSignal.timeout(3000)});
+    const ctrl=new AbortController();const tmr=setTimeout(()=>ctrl.abort(),3000);
+    const r=await fetch(base+"/api/sync/pull",{signal:ctrl.signal});clearTimeout(tmr);
     if(!r.ok)throw new Error();
     laptopAvailable=true;return await r.json();
   }catch(e){laptopAvailable=false;return null;}
@@ -626,7 +627,8 @@ async function testConnection(){
   const ind=document.getElementById('conn-indicator');
   ind.className='conn-status conn-fail';ind.textContent='🔄 Tesztelés...';
   try{
-    const r=await fetch('http://'+ip+':'+port+'/api/sync/pull',{signal:AbortSignal.timeout(4000)});
+    const ctrl=new AbortController();const tmr=setTimeout(()=>ctrl.abort(),4000);
+    const r=await fetch('http://'+ip+':'+port+'/api/sync/pull',{signal:ctrl.signal});clearTimeout(tmr);
     if(r.ok){ind.className='conn-status conn-ok';ind.textContent='✅ Laptop elérhető!';}
     else throw new Error();
   }catch(e){ind.className='conn-status conn-fail';ind.textContent='❌ Nem elérhető — ellenőrizd az IP-t és hogy fut-e a laptop app';}
