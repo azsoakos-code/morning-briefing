@@ -109,10 +109,54 @@ h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
 .ref:active{transform:scale(0.9);opacity:0.7}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .ref.loading{animation:spin 1s linear infinite}
+/* Lock screen */
+.lock-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:#020a14;z-index:99999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px}
+.lock-screen.hidden{display:none}
+.lock-icon{font-size:48px;margin-bottom:20px}
+.lock-title{color:#e0f2fe;font-size:18px;font-weight:700;margin-bottom:6px}
+.lock-sub{color:#334155;font-size:12px;margin-bottom:30px}
+.pin-dots{display:flex;gap:14px;margin-bottom:30px}
+.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid #1e3a6e;background:transparent;transition:all .2s}
+.pin-dot.filled{background:#2563eb;border-color:#2563eb;box-shadow:0 0 8px rgba(37,99,235,0.5)}
+.pin-dot.wrong{background:#ef4444;border-color:#ef4444;box-shadow:0 0 8px rgba(239,68,68,0.5)}
+.pin-grid{display:grid;grid-template-columns:repeat(3,72px);gap:12px}
+.pin-btn{width:72px;height:72px;border-radius:50%;background:#040f1f;border:1px solid #0f2a50;
+  color:#e0f2fe;font-size:28px;font-weight:600;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.pin-btn:active{background:#1d4ed8;border-color:#2563eb;transform:scale(0.92)}
+.pin-btn.empty{visibility:hidden}
+.pin-btn.del{font-size:18px;color:#64748b}
 </style>
 </head>
 <body>
 
+<!-- ═══ PIN LOCK SCREEN ═══ -->
+<div class="lock-screen" id="lock-screen">
+  <div class="lock-icon">🔒</div>
+  <div class="lock-title">Morning Briefing</div>
+  <div class="lock-sub">Add meg a kódot</div>
+  <div class="pin-dots" id="pin-dots">
+    <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+    <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+  </div>
+  <div class="pin-grid">
+    <button class="pin-btn" onclick="pinPress('1')">1</button>
+    <button class="pin-btn" onclick="pinPress('2')">2</button>
+    <button class="pin-btn" onclick="pinPress('3')">3</button>
+    <button class="pin-btn" onclick="pinPress('4')">4</button>
+    <button class="pin-btn" onclick="pinPress('5')">5</button>
+    <button class="pin-btn" onclick="pinPress('6')">6</button>
+    <button class="pin-btn" onclick="pinPress('7')">7</button>
+    <button class="pin-btn" onclick="pinPress('8')">8</button>
+    <button class="pin-btn" onclick="pinPress('9')">9</button>
+    <button class="pin-btn empty"></button>
+    <button class="pin-btn" onclick="pinPress('0')">0</button>
+    <button class="pin-btn del" onclick="pinDelete()">⌫</button>
+  </div>
+</div>
+
+<div id="app-content" style="display:none">
 <div class="hdr">
   <div>
     <h1>Morning Briefing</h1>
@@ -190,6 +234,7 @@ h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
   </div>
 </div>
 </div>
+</div><!-- /app-content -->
 
 <script>
 // ═══════════════════════════════════════════════════════════════════
@@ -266,17 +311,16 @@ function loadRecurringLocal(){
 function loadTasksLocal(){return LS('tasks',[]);}
 
 // ── VÁLTOZATOS ÜDVÖZLÉSEK ──
-const GREET_MORNING=["🌅 Jó reggelt, Ákos!","☀️ Szép jó reggelt, Ákos!","🌄 Hajrá, Ákos! Új nap, új lehetőségek!","💪 Ébredj, Vadász! A küldetés vár!","🔥 Szia Ákos! Készülj, ma is hódítunk!","⚔️ Reggel van, Ákos! Ideje szintet lépni!"];
-const GREET_DAY=["☀️ Szép napot, Ákos!","🌞 Szia Ákos! Hogy halad a nap?","💫 Hajrá Ákos, fél nap megvolt!","⚡ Tartsd a tempót, Ákos!"];
-const GREET_EVE=["🌆 Jó estét, Ákos!","🌇 Szép estét, Ákos!","🌆 Szia Ákos! Hogy telt a nap?","✨ Jó estét, Vadász!"];
-const GREET_NIGHT=["🌙 Jó éjszakát, Ákos!","🌙 Pihenj jól, Ákos!","💤 Ideje aludni, Ákos! Holnap új küldetés vár.","🌌 Jó éjt, Vadász! Töltődj fel holnapra!"];
+const GREET_MORNING=["Jó reggelt, Ákos!","Szép jó reggelt!","Szia Ákos! Jó reggelt!","Jó reggelt! Hogy aludtál?","Reggelt, Ákos!","Szép napot, Ákos!"];
+const GREET_DAY=["Szia Ákos!","Szép napot!","Szép napot, Ákos!","Szia! Hogy halad a nap?","Helló Ákos!"];
+const GREET_EVE=["Jó estét, Ákos!","Szép estét!","Szia Ákos!","Jó estét!","Helló Ákos! Hogy telt a nap?"];
+const GREET_NIGHT=["Jó éjszakát, Ákos!","Jó éjt!","Pihenj jól, Ákos!","Szép álmokat, Ákos!","Jó éjszakát!"];
 
 const MOTIVATIONS=[
   "A fegyelem legyőzi a motivációt. Minden nap számít.",
   "Nem az számít hányszor esel el, hanem hányszor állsz fel.",
   "A mai erőfeszítésed a holnapi erőd.",
   "Kis lépések, nagy eredmények. Csak ne állj meg.",
-  "A komfortzónád a legnagyobb ellenséged.",
   "Aki mer, az nyer. Aki kitart, az győz.",
   "Minden mester egykor tanítvány volt.",
   "A legjobb befektetés: önmagadba fektetni.",
@@ -285,23 +329,24 @@ const MOTIVATIONS=[
   "Légy jobb, mint tegnap voltál.",
   "A nehézségek nem megállítanak, hanem erősebbé tesznek.",
   "Csináld meg ma azt, amit a holnapi éned megköszön.",
-  "Az egyetlen korlát az, amit magadnak állítasz.",
   "Minden nap egy újabb esély, hogy a legjobb verzióddá válj.",
   "A kitartás mindig legyőzi a tehetséget, ha a tehetség nem kitartó.",
-  "A mai fájdalom a holnapi büszkeséged.",
   "Ne számold a napokat — tedd, hogy a napok számítsanak!",
-  "Egy Vadász sosem adja fel. Sosem.",
-  "A szintek nem maguktól nőnek — dolgozz érte!",
   "Ma is egy lépéssel közelebb vagy a célodhoz.",
-  "A legerősebb fegyver az elméd. Élesítsd minden nap!",
   "Nem kell tökéletesnek lenned, csak jobbnak mint tegnap.",
   "A kudarc csupán tanulság álruhában.",
   "Cselekedj úgy, mintha lehetetlen lenne kudarcot vallani!",
   "Az igazi erő onnan jön, hogy nem adod fel.",
-  "A Monarcha útja nehéz, de megéri.",
   "Aki minden nap 1%-ot fejlődik, egy év alatt 37x jobb lesz.",
   "A siker titka: elkezdeni és nem abbahagyni.",
-  "A lehetetlen csak egy vélemény, nem tény."
+  "A lehetetlen csak egy vélemény, nem tény.",
+  "Egy lépés előre többet ér, mint száz terv.",
+  "A mai nap ajándék — használd ki okosan!",
+  "Higgy magadban, mert képes vagy rá.",
+  "A változás tőled indul.",
+  "Minden reggel egy új kezdet.",
+  "A türelem és a munka mindent legyőz.",
+  "Ha akarod, meg tudod csinálni."
 ];
 
 function pickRandom(arr){return arr[Math.floor(Math.random()*arr.length)];}
@@ -902,6 +947,78 @@ setInterval(()=>{loadCurrentTab();},300000);
 setInterval(checkPhoneReminders,60000);
 setInterval(()=>{syncFromLaptop().then(()=>{pushToLaptop();});},120000);
 setInterval(pollAlerts,30000);
+
+// ═══════════════════════════════════════════════════════════════════
+//  PIN ZÁROLÁS
+// ═══════════════════════════════════════════════════════════════════
+const PIN_CODE='180508';
+let pinInput='';
+let pinUnlocked=false;
+
+// Session check — ha 10 percen belül volt nyitva, ne kérjen kódot
+const lastUnlock=parseInt(localStorage.getItem('mb_last_unlock')||'0');
+if(Date.now()-lastUnlock<600000){
+  pinUnlocked=true;
+  document.getElementById('lock-screen').classList.add('hidden');
+  document.getElementById('app-content').style.display='block';
+}
+
+function pinPress(num){
+  if(pinInput.length>=6)return;
+  pinInput+=num;
+  updatePinDots();
+  if(pinInput.length===6){
+    if(pinInput===PIN_CODE){
+      // Helyes kód
+      pinUnlocked=true;
+      localStorage.setItem('mb_last_unlock',Date.now().toString());
+      const dots=document.querySelectorAll('.pin-dot');
+      dots.forEach(d=>{d.classList.add('filled');});
+      setTimeout(()=>{
+        document.getElementById('lock-screen').classList.add('hidden');
+        document.getElementById('app-content').style.display='block';
+      },300);
+    } else {
+      // Hibás kód
+      const dots=document.querySelectorAll('.pin-dot');
+      dots.forEach(d=>{d.classList.add('wrong');});
+      if(navigator.vibrate)navigator.vibrate([100,50,100]);
+      setTimeout(()=>{
+        pinInput='';
+        dots.forEach(d=>{d.classList.remove('wrong','filled');});
+      },600);
+    }
+  }
+}
+
+function pinDelete(){
+  if(pinInput.length>0){
+    pinInput=pinInput.slice(0,-1);
+    updatePinDots();
+  }
+}
+
+function updatePinDots(){
+  const dots=document.querySelectorAll('.pin-dot');
+  dots.forEach((d,i)=>{
+    d.classList.toggle('filled',i<pinInput.length);
+  });
+}
+
+// Zárolás ha az app háttérbe kerül (2 perc után)
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){
+    localStorage.setItem('mb_hide_time',Date.now().toString());
+  } else {
+    const hideTime=parseInt(localStorage.getItem('mb_hide_time')||'0');
+    if(Date.now()-hideTime>120000 && pinUnlocked){
+      pinUnlocked=false;pinInput='';
+      updatePinDots();
+      document.getElementById('lock-screen').classList.remove('hidden');
+      document.getElementById('app-content').style.display='none';
+    }
+  }
+});
 </script>
 </body>
 </html>
