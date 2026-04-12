@@ -955,9 +955,9 @@ const PIN_CODE='180508';
 let pinInput='';
 let pinUnlocked=false;
 
-// Session check — ha 10 percen belül volt nyitva, ne kérjen kódot
-const lastUnlock=parseInt(localStorage.getItem('mb_last_unlock')||'0');
-if(Date.now()-lastUnlock<600000){
+// Megbízható eszköz ellenőrzés — ha már egyszer beírta a kódot, többé nem kéri
+const isTrusted=localStorage.getItem('mb_trusted_device')==='true';
+if(isTrusted){
   pinUnlocked=true;
   document.getElementById('lock-screen').classList.add('hidden');
   document.getElementById('app-content').style.display='block';
@@ -969,9 +969,9 @@ function pinPress(num){
   updatePinDots();
   if(pinInput.length===6){
     if(pinInput===PIN_CODE){
-      // Helyes kód
+      // Helyes kód — eszköz megbízható, többé nem kéri
       pinUnlocked=true;
-      localStorage.setItem('mb_last_unlock',Date.now().toString());
+      localStorage.setItem('mb_trusted_device','true');
       const dots=document.querySelectorAll('.pin-dot');
       dots.forEach(d=>{d.classList.add('filled');});
       setTimeout(()=>{
@@ -1005,20 +1005,7 @@ function updatePinDots(){
   });
 }
 
-// Zárolás ha az app háttérbe kerül (2 perc után)
-document.addEventListener('visibilitychange',()=>{
-  if(document.hidden){
-    localStorage.setItem('mb_hide_time',Date.now().toString());
-  } else {
-    const hideTime=parseInt(localStorage.getItem('mb_hide_time')||'0');
-    if(Date.now()-hideTime>120000 && pinUnlocked){
-      pinUnlocked=false;pinInput='';
-      updatePinDots();
-      document.getElementById('lock-screen').classList.remove('hidden');
-      document.getElementById('app-content').style.display='none';
-    }
-  }
-});
+// Megbízható eszközön SOHA nem zárol újra
 </script>
 </body>
 </html>
