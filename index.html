@@ -133,6 +133,7 @@ h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
 <div id="greeting" style="text-align:center;font-size:18px;font-weight:700;color:#60a5fa;margin-bottom:8px"></div>
 <div class="clock" id="clk">--:--:--</div>
 <div class="date" id="dat">...</div>
+<div id="daily-motivation" style="text-align:center;font-size:12px;color:#7c3aed;font-style:italic;margin-bottom:8px;padding:0 10px;line-height:1.4"></div>
 <div id="sync-status" style="text-align:center;font-size:10px;color:#334155;margin-bottom:8px"></div>
 
 <div class="card">
@@ -264,14 +265,123 @@ function loadRecurringLocal(){
 
 function loadTasksLocal(){return LS('tasks',[]);}
 
-// ── ÜDVÖZLÉS ──
+// ── VÁLTOZATOS ÜDVÖZLÉSEK ──
+const GREET_MORNING=["🌅 Jó reggelt, Ákos!","☀️ Szép jó reggelt, Ákos!","🌄 Hajrá, Ákos! Új nap, új lehetőségek!","💪 Ébredj, Vadász! A küldetés vár!","🔥 Szia Ákos! Készülj, ma is hódítunk!","⚔️ Reggel van, Ákos! Ideje szintet lépni!"];
+const GREET_DAY=["☀️ Szép napot, Ákos!","🌞 Szia Ákos! Hogy halad a nap?","💫 Hajrá Ákos, fél nap megvolt!","⚡ Tartsd a tempót, Ákos!"];
+const GREET_EVE=["🌆 Jó estét, Ákos!","🌇 Szép estét, Ákos!","🌆 Szia Ákos! Hogy telt a nap?","✨ Jó estét, Vadász!"];
+const GREET_NIGHT=["🌙 Jó éjszakát, Ákos!","🌙 Pihenj jól, Ákos!","💤 Ideje aludni, Ákos! Holnap új küldetés vár.","🌌 Jó éjt, Vadász! Töltődj fel holnapra!"];
+
+const MOTIVATIONS=[
+  "A fegyelem legyőzi a motivációt. Minden nap számít.",
+  "Nem az számít hányszor esel el, hanem hányszor állsz fel.",
+  "A mai erőfeszítésed a holnapi erőd.",
+  "Kis lépések, nagy eredmények. Csak ne állj meg.",
+  "A komfortzónád a legnagyobb ellenséged.",
+  "Aki mer, az nyer. Aki kitart, az győz.",
+  "Minden mester egykor tanítvány volt.",
+  "A legjobb befektetés: önmagadba fektetni.",
+  "Ne várd a tökéletes pillanatot — teremtsd meg!",
+  "A siker nem végállomás, hanem út.",
+  "Légy jobb, mint tegnap voltál.",
+  "A nehézségek nem megállítanak, hanem erősebbé tesznek.",
+  "Csináld meg ma azt, amit a holnapi éned megköszön.",
+  "Az egyetlen korlát az, amit magadnak állítasz.",
+  "Minden nap egy újabb esély, hogy a legjobb verzióddá válj.",
+  "A kitartás mindig legyőzi a tehetséget, ha a tehetség nem kitartó.",
+  "A mai fájdalom a holnapi büszkeséged.",
+  "Ne számold a napokat — tedd, hogy a napok számítsanak!",
+  "Egy Vadász sosem adja fel. Sosem.",
+  "A szintek nem maguktól nőnek — dolgozz érte!",
+  "Ma is egy lépéssel közelebb vagy a célodhoz.",
+  "A legerősebb fegyver az elméd. Élesítsd minden nap!",
+  "Nem kell tökéletesnek lenned, csak jobbnak mint tegnap.",
+  "A kudarc csupán tanulság álruhában.",
+  "Cselekedj úgy, mintha lehetetlen lenne kudarcot vallani!",
+  "Az igazi erő onnan jön, hogy nem adod fel.",
+  "A Monarcha útja nehéz, de megéri.",
+  "Aki minden nap 1%-ot fejlődik, egy év alatt 37x jobb lesz.",
+  "A siker titka: elkezdeni és nem abbahagyni.",
+  "A lehetetlen csak egy vélemény, nem tény."
+];
+
+function pickRandom(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function pickDaily(arr){const d=new Date();const idx=(d.getFullYear()*366+d.getMonth()*31+d.getDate())%arr.length;return arr[idx];}
+
 function showGreeting(){
   const h=new Date().getHours();let msg;
-  if(h>=6&&h<11)msg="🌅 Jó reggelt, Ákos!";
-  else if(h>=11&&h<18)msg="☀️ Szép napot, Ákos!";
-  else if(h>=18&&h<22)msg="🌆 Jó estét, Ákos!";
-  else msg="🌙 Jó éjszakát, Ákos!";
+  if(h>=6&&h<11)msg=pickRandom(GREET_MORNING);
+  else if(h>=11&&h<18)msg=pickRandom(GREET_DAY);
+  else if(h>=18&&h<22)msg=pickRandom(GREET_EVE);
+  else msg=pickRandom(GREET_NIGHT);
   document.getElementById('greeting').textContent=msg;
+
+  // Napi motiváció (naponta változik, nem random)
+  const motEl=document.getElementById('daily-motivation');
+  if(motEl)motEl.textContent='💡 '+pickDaily(MOTIVATIONS);
+}
+
+// ── REGGELI / ESTI ÖSSZEFOGLALÓ BANNER ──
+function showDailySummary(){
+  const h=new Date().getHours();
+  const tk=todayKey();
+  const shown=LS('summary_shown_'+tk,{morning:false,evening:false});
+
+  // Reggeli összefoglaló (6-10 között, egyszer)
+  if(h>=6&&h<10&&!shown.morning){
+    const wd=new Date().getDay();const dayIdx=(wd===0)?6:wd-1;
+    let tasks=[];
+    const rec=loadRecurringLocal()[tk]||{};
+    if(!rec.medicine)tasks.push('💊 Gyógyszer');
+    if(!rec.mom_call)tasks.push('📞 Anya felhívása');
+    if(dayIdx<5){
+      const ch=DAILY_EXTRA[dayIdx];
+      tasks.push('⚔️ '+ch.name.trim());
+    }
+    const items=loadTasksLocal().filter(i=>i.type!=='cat'&&!i.done);
+    items.forEach(i=>tasks.push('📋 '+i.text));
+    let msg='🌅 Jó reggelt, Ákos!\n\n💡 '+pickDaily(MOTIVATIONS)+'\n\n';
+    if(tasks.length>0){msg+='📌 Mai teendőid:\n'+tasks.join('\n');}
+    else{msg+='✅ Nincs tervezett teendőd mára!';}
+    phoneNotify('🌅 Jó reggelt, Ákos!',pickDaily(MOTIVATIONS));
+    showFullBanner(msg);
+    shown.morning=true;LSset('summary_shown_'+tk,shown);
+  }
+
+  // Esti összefoglaló (22-23 között, egyszer)
+  if(h>=22&&h<23&&!shown.evening){
+    const wd=new Date().getDay();const dayIdx=(wd===0)?6:wd-1;
+    let done=[],missed=[];
+    const rec=loadRecurringLocal()[tk]||{};
+    if(rec.medicine)done.push('💊 Gyógyszer');else missed.push('💊 Gyógyszer');
+    if(rec.mom_call)done.push('📞 Anya');else missed.push('📞 Anya felhívása');
+    if(dayIdx<5){
+      const p=loadSoloLocal();
+      if(p.completed_today)done.push('⚔️ Solo Leveling küldetés');else missed.push('⚔️ Solo Leveling');
+    }
+    const items=loadTasksLocal().filter(i=>i.type!=='cat');
+    items.forEach(i=>{if(i.done)done.push('✅ '+i.text);else missed.push('📋 '+i.text);});
+    let msg='🌙 Jó estét, Ákos! Napi összefoglaló:\n\n';
+    if(done.length){msg+='✅ Elvégezve:\n'+done.join('\n')+'\n\n';}
+    if(missed.length){msg+='❌ Kimaradt:\n'+missed.join('\n')+'\n\n';}
+    if(missed.length===0)msg+='🎉 Minden kész! Szuper nap volt!';
+    else msg+='💪 Holnap újra! Pihenj jól!';
+    phoneNotify('🌙 Napi összefoglaló','Elvégezve: '+done.length+' | Kimaradt: '+missed.length);
+    showFullBanner(msg);
+    shown.evening=true;LSset('summary_shown_'+tk,shown);
+  }
+}
+
+function showFullBanner(msg){
+  const d=document.createElement('div');
+  d.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(2,10,20,0.95);z-index:9999;display:flex;align-items:center;justify-content:center;padding:30px';
+  const inner=document.createElement('div');
+  inner.style.cssText='background:#040f1f;border:2px solid #2563eb;border-radius:16px;padding:24px;max-width:380px;width:100%;color:#e0f2fe;font-size:14px;line-height:1.6;white-space:pre-line;box-shadow:0 0 40px rgba(37,99,235,0.3)';
+  inner.textContent=msg;
+  const btn=document.createElement('button');
+  btn.textContent='OK';
+  btn.style.cssText='display:block;width:100%;margin-top:16px;padding:12px;background:#1d4ed8;color:#e0f2fe;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer';
+  btn.onclick=()=>d.remove();
+  inner.appendChild(btn);d.appendChild(inner);document.body.appendChild(d);
 }
 
 // ── ÓRA ──
@@ -783,6 +893,8 @@ async function loadAll(){
   loadCal();loadTasks();loadRecurring();loadSolo();
   buildNewsTabs();
   if(currentTab==='news')loadNews(currentNews);
+  // Reggeli/esti összefoglaló megjelenítése ha aktuális
+  setTimeout(showDailySummary,2000);
 }
 loadAll();
 
