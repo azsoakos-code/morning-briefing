@@ -6,6 +6,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#020a14">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="no-referrer">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23020a14'/%3E%3Cstop offset='100%25' stop-color='%230a1f3d'/%3E%3C/linearGradient%3E%3ClinearGradient id='sun' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23f59e0b'/%3E%3Cstop offset='100%25' stop-color='%23ef4444'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='100' fill='url(%23bg)'/%3E%3Ccircle cx='256' cy='200' r='80' fill='url(%23sun)'/%3E%3Crect x='80' y='300' width='352' height='8' rx='4' fill='%231d4ed8'/%3E%3Crect x='120' y='330' width='272' height='6' rx='3' fill='%230f2a50'/%3E%3Crect x='120' y='355' width='200' height='6' rx='3' fill='%230f2a50'/%3E%3Crect x='120' y='380' width='240' height='6' rx='3' fill='%230f2a50'/%3E%3Ctext x='256' y='460' text-anchor='middle' fill='%232563eb' font-family='sans-serif' font-weight='800' font-size='48'%3EMB%3C/text%3E%3C/svg%3E">
 <title>Morning Briefing</title>
@@ -102,6 +105,29 @@ h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
              text-align:center;margin-bottom:14px}
 .conn-ok{background:#062717;color:#22c55e;border:1px solid #16a34a}
 .conn-fail{background:#2a0a0a;color:#f87171;border:1px solid #ef4444}
+.habit-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #0a1f3d;cursor:pointer}
+.habit-item:last-child{border-bottom:none}
+.habit-item input[type=checkbox]{width:22px;height:22px;accent-color:#2563eb;cursor:pointer;flex-shrink:0}
+.habit-item label{font-size:15px;color:#cbd5e1;cursor:pointer;line-height:1.3;flex:1}
+.habit-item.done label{color:#1e3a6e;text-decoration:line-through}
+.habit-time{color:#334155;font-size:10px}
+.habit-streak{color:#f59e0b;font-size:11px;font-weight:600}
+.habit-add-btn{background:transparent;color:#2563eb;border:1px dashed #1e3a6e;border-radius:10px;padding:10px;width:100%;font-size:13px;cursor:pointer;margin-top:8px}
+.habit-add-btn:active{background:#040f1f}
+.habit-edit-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9998;padding:20px;overflow-y:auto}
+.habit-edit-overlay.open{display:block}
+.habit-edit-card{background:#040f1f;border:1px solid #2563eb;border-radius:14px;padding:20px;max-width:400px;margin:40px auto}
+.habit-edit-card h2{color:#e0f2fe;font-size:16px;margin-bottom:16px}
+.habit-edit-card label{color:#60a5fa;font-size:12px;font-weight:700;letter-spacing:1px;display:block;margin-bottom:4px}
+.habit-edit-card input,.habit-edit-card select{width:100%;background:#020a14;color:#e0f2fe;border:1px solid #0f2a50;border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:14px}
+.emoji-picker{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.emoji-opt{font-size:24px;padding:6px;border-radius:8px;cursor:pointer;background:transparent;border:2px solid transparent}
+.emoji-opt.selected{border-color:#2563eb;background:#0a1a3a}
+.habit-del{color:#f87171;font-size:12px;cursor:pointer;text-align:center;margin-top:10px;padding:8px}
+.heatmap{display:flex;gap:2px;flex-wrap:wrap;margin-top:8px}
+.heatmap-day{width:12px;height:12px;border-radius:2px;background:#0a1f3d}
+.heatmap-day.done{background:#22c55e}
+.heatmap-day.today{border:1px solid #2563eb}
 .net-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
 .net-online{background:#22c55e;box-shadow:0 0 6px #22c55e}
 .net-offline{background:#ef4444;box-shadow:0 0 6px #ef4444}
@@ -196,8 +222,34 @@ h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
 </div>
 
 <div class="card">
-  <div class="sec">📋 NAPI FELADATOK</div>
-  <div id="recurring"><div style="color:#334155">Betöltés...</div></div>
+  <div class="sec" style="display:flex;justify-content:space-between;align-items:center">
+    <span>📋 SZOKÁSOK</span>
+    <button onclick="openHabitEdit()" style="background:transparent;border:1px solid #1e3a6e;color:#60a5fa;border-radius:6px;padding:2px 8px;font-size:10px;cursor:pointer">+ Új</button>
+  </div>
+  <div id="habits"><div style="color:#334155">Betöltés...</div></div>
+  <div id="habit-heatmap"></div>
+</div>
+
+<!-- Szokás szerkesztő overlay -->
+<div class="habit-edit-overlay" id="habit-edit-overlay">
+<div class="habit-edit-card">
+  <h2 id="habit-edit-title">Új szokás</h2>
+  <label>IKON</label>
+  <div class="emoji-picker" id="habit-emoji-picker"></div>
+  <label>SZOKÁS NEVE</label>
+  <input type="text" id="habit-name" placeholder="pl. Reggeli séta">
+  <label>IDŐPONT</label>
+  <input type="time" id="habit-time" value="08:00">
+  <label>GYAKORISÁG</label>
+  <select id="habit-freq">
+    <option value="daily">Minden nap</option>
+    <option value="weekday">Hétköznap</option>
+    <option value="weekend">Hétvége</option>
+  </select>
+  <button class="btn" onclick="saveHabit()" style="background:#062717;color:#22c55e;border-color:#16a34a">💾 Mentés</button>
+  <button class="btn" onclick="closeHabitEdit()" style="margin-top:8px;background:transparent;color:#64748b;border-color:#1e3a6e">Bezárás</button>
+  <div id="habit-del-btn" class="habit-del" style="display:none" onclick="deleteHabit()">🗑 Szokás törlése</div>
+</div>
 </div>
 
 <div class="system-card">
@@ -300,6 +352,33 @@ function loadSoloLocal(){
   const tasks=[...BASE_TASKS,...DAILY_EXTRA[dayIdx].extra];
   if(!p.task_checks[tk])p.task_checks[tk]=new Array(tasks.length).fill(false);
   return p;
+}
+
+// ── DEFAULT SZOKÁSOK ──
+const DEFAULT_HABITS=[
+  {id:'h1',name:'Reggeli gyógyszer',icon:'💊',time:'08:00',freq:'weekday'},
+  {id:'h2',name:'Anya felhívása',icon:'📞',time:'18:00',freq:'weekday'},
+  {id:'h3',name:'Víz ivás (2L)',icon:'💧',time:'',freq:'daily'},
+  {id:'h4',name:'Olvasás',icon:'📖',time:'21:00',freq:'daily'},
+  {id:'h5',name:'Meditáció',icon:'🧘',time:'07:00',freq:'weekday'}
+];
+const HABIT_EMOJIS=['💊','📞','💧','📖','🧘','🏃','💪','🎯','✍️','🎵','🧹','🛌','🥗','☕','🚿','📝','🎨','👨‍💻','🌳','🙏'];
+let editingHabitId=null;
+
+function getHabits(){
+  let h=LS('habits',null);
+  if(!h){h=DEFAULT_HABITS;LSset('habits',h);}
+  return h;
+}
+
+function getHabitLog(){return LS('habit_log',{});}
+
+function isHabitDue(habit){
+  const wd=new Date().getDay();const dayIdx=(wd===0)?6:wd-1;
+  if(habit.freq==='daily')return true;
+  if(habit.freq==='weekday')return dayIdx<5;
+  if(habit.freq==='weekend')return dayIdx>=5;
+  return true;
 }
 
 function loadRecurringLocal(){
@@ -541,27 +620,150 @@ async function checkTxt(idx,checked){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  NAPI FELADATOK (recurring) — localStorage
+//  SZOKÁSOK (Habit Tracker) — localStorage
 // ═══════════════════════════════════════════════════════════════════
 function loadRecurring(){
-  const wd=new Date().getDay();const dayIdx=(wd===0)?6:wd-1;
-  const el=document.getElementById("recurring");
-  if(dayIdx>=5){el.innerHTML='<div style="color:#334155;padding:8px 0;">🌙 Hétvége — pihenő nap</div>';return;}
-  const d=loadRecurringLocal();const tk=todayKey();const checks=d[tk]||{medicine:false,mom_call:false};
+  const habits=getHabits().filter(isHabitDue);
+  const log=getHabitLog();
+  const tk=todayKey();
+  const todayLog=log[tk]||{};
+  const el=document.getElementById("habits");
+  if(habits.length===0){el.innerHTML='<div style="color:#334155;padding:8px 0;">Nincs mai szokás</div>';return;}
   let h='';
-  h+='<div class="rec-item'+(checks.medicine?' done':'')+'"><input type="checkbox" id="med" '+(checks.medicine?'checked':'')+' onchange="checkRec(\'medicine\',this.checked)"><label for="med">💊 Reggeli gyógyszer bevétele (8:00)</label></div>';
-  h+='<div class="rec-item'+(checks.mom_call?' done':'')+'"><input type="checkbox" id="mom" '+(checks.mom_call?'checked':'')+' onchange="checkRec(\'mom_call\',this.checked)"><label for="mom">📞 Anya felhívása (18:00 – 23:00)</label></div>';
+  habits.forEach(hab=>{
+    const done=!!todayLog[hab.id];
+    const streak=calcHabitStreak(hab.id);
+    h+='<div class="habit-item'+(done?' done':'')+'">';
+    h+='<input type="checkbox" id="hab_'+hab.id+'" '+(done?'checked':'')+' onchange="toggleHabit(\''+hab.id+'\',this.checked)">';
+    h+='<label for="hab_'+hab.id+'">'+hab.icon+' '+hab.name;
+    if(hab.time)h+=' <span class="habit-time">('+hab.time+')</span>';
+    h+='</label>';
+    if(streak>1)h+='<span class="habit-streak">🔥'+streak+'</span>';
+    h+='</div>';
+  });
+  el.innerHTML=h;
+  renderHeatmap();
+}
+
+function toggleHabit(id,checked){
+  const log=getHabitLog();const tk=todayKey();
+  if(!log[tk])log[tk]={};
+  log[tk][id]=checked;
+  LSset('habit_log',log);
+  loadRecurring();
+  // Laptop sync
+  const base=getLaptopUrl();
+  if(laptopAvailable&&base){
+    try{fetch(base+"/api/recurring/check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({[id]:checked})}).catch(()=>{});}catch(e){}
+  }
+}
+
+function calcHabitStreak(id){
+  const log=getHabitLog();
+  let streak=0;
+  const d=new Date();
+  for(let i=0;i<365;i++){
+    const key=d.toISOString().slice(0,10);
+    if(log[key]&&log[key][id])streak++;
+    else if(i>0)break;
+    d.setDate(d.getDate()-1);
+  }
+  return streak;
+}
+
+function renderHeatmap(){
+  const el=document.getElementById("habit-heatmap");
+  if(!el)return;
+  const habits=getHabits();const log=getHabitLog();
+  const tk=todayKey();
+  let h='<div style="color:#334155;font-size:9px;margin-top:10px;margin-bottom:4px">UTOLSÓ 30 NAP</div><div class="heatmap">';
+  const d=new Date();d.setDate(d.getDate()-29);
+  for(let i=0;i<30;i++){
+    const key=d.toISOString().slice(0,10);
+    const dayLog=log[key]||{};
+    const total=habits.length;
+    const done=Object.values(dayLog).filter(Boolean).length;
+    const ratio=total>0?done/total:0;
+    const isToday=key===tk;
+    let color='#0a1f3d';
+    if(ratio>0.75)color='#22c55e';
+    else if(ratio>0.5)color='#16a34a';
+    else if(ratio>0.25)color='#15803d';
+    else if(ratio>0)color='#166534';
+    h+='<div class="heatmap-day'+(isToday?' today':'')+'" style="background:'+color+'" title="'+key+': '+done+'/'+total+'"></div>';
+    d.setDate(d.getDate()+1);
+  }
+  h+='</div>';
   el.innerHTML=h;
 }
 
-async function checkRec(key,val){
-  const d=loadRecurringLocal();const tk=todayKey();
-  if(!d[tk])d[tk]={medicine:false,mom_call:false};
-  d[tk][key]=val;LSset('recurring',d);
-  const base=getLaptopUrl();
-  if(laptopAvailable&&base){
-    try{await fetch(base+"/api/recurring/check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({[key]:val})});}catch(e){}
+// Szokás szerkesztő
+function openHabitEdit(id){
+  editingHabitId=id||null;
+  const overlay=document.getElementById('habit-edit-overlay');
+  overlay.classList.add('open');
+  document.getElementById('habit-edit-title').textContent=id?'Szokás szerkesztése':'Új szokás';
+  document.getElementById('habit-del-btn').style.display=id?'block':'none';
+  // Emoji picker
+  const picker=document.getElementById('habit-emoji-picker');
+  picker.innerHTML='';
+  let selectedEmoji=HABIT_EMOJIS[0];
+  if(id){
+    const hab=getHabits().find(h=>h.id===id);
+    if(hab){
+      document.getElementById('habit-name').value=hab.name;
+      document.getElementById('habit-time').value=hab.time||'';
+      document.getElementById('habit-freq').value=hab.freq||'daily';
+      selectedEmoji=hab.icon;
+    }
+  }else{
+    document.getElementById('habit-name').value='';
+    document.getElementById('habit-time').value='08:00';
+    document.getElementById('habit-freq').value='daily';
   }
+  HABIT_EMOJIS.forEach(e=>{
+    const btn=document.createElement('button');
+    btn.className='emoji-opt'+(e===selectedEmoji?' selected':'');
+    btn.textContent=e;btn.type='button';
+    btn.onclick=()=>{picker.querySelectorAll('.emoji-opt').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');};
+    picker.appendChild(btn);
+  });
+}
+
+function closeHabitEdit(){document.getElementById('habit-edit-overlay').classList.remove('open');}
+
+function saveHabit(){
+  const name=document.getElementById('habit-name').value.trim();
+  if(!name){showBanner('⚠ Adj nevet a szokásnak!');return;}
+  const icon=document.querySelector('.emoji-opt.selected')?.textContent||'🎯';
+  const time=document.getElementById('habit-time').value;
+  const freq=document.getElementById('habit-freq').value;
+  const habits=getHabits();
+  if(editingHabitId){
+    const idx=habits.findIndex(h=>h.id===editingHabitId);
+    if(idx>=0){habits[idx]={...habits[idx],name,icon,time,freq};}
+  }else{
+    const id='h'+Date.now();
+    habits.push({id,name,icon,time,freq});
+  }
+  LSset('habits',habits);
+  closeHabitEdit();loadRecurring();
+  showBanner('✅ Szokás mentve!');
+}
+
+function deleteHabit(){
+  if(!editingHabitId)return;
+  if(!confirm('Biztosan törlöd ezt a szokást?'))return;
+  const habits=getHabits().filter(h=>h.id!==editingHabitId);
+  LSset('habits',habits);
+  closeHabitEdit();loadRecurring();
+  showBanner('🗑 Szokás törölve');
+}
+
+function checkRec(key,val){
+  const d=loadRecurringLocal();const tk=todayKey();
+  if(!d[tk])d[tk]={};
+  d[tk][key]=val;LSset('recurring',d);
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -949,13 +1151,22 @@ setInterval(()=>{syncFromLaptop().then(()=>{pushToLaptop();});},120000);
 setInterval(pollAlerts,30000);
 
 // ═══════════════════════════════════════════════════════════════════
-//  PIN ZÁROLÁS
+//  PIN ZÁROLÁS — SHA-256 HASH + RATE LIMITING + BRUTE-FORCE VÉDELEM
 // ═══════════════════════════════════════════════════════════════════
-const PIN_CODE='180508';
+// PIN hash (SHA-256) — a plaintext kód NINCS a kliensben
+const PIN_HASH='9a055a23f42b7da02ee3c61925ca55b72799d9384d15ffbaca930337cb4ee96b';
 let pinInput='';
 let pinUnlocked=false;
+let pinAttempts=parseInt(localStorage.getItem('mb_pin_attempts')||'0');
+let pinLockUntil=parseInt(localStorage.getItem('mb_pin_lock_until')||'0');
 
-// Megbízható eszköz ellenőrzés — ha már egyszer beírta a kódot, többé nem kéri
+async function sha256(text){
+  const data=new TextEncoder().encode(text);
+  const hash=await crypto.subtle.digest('SHA-256',data);
+  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// Megbízható eszköz ellenőrzés
 const isTrusted=localStorage.getItem('mb_trusted_device')==='true';
 if(isTrusted){
   pinUnlocked=true;
@@ -963,15 +1174,50 @@ if(isTrusted){
   document.getElementById('app-content').style.display='block';
 }
 
-function pinPress(num){
+function checkLockout(){
+  const now=Date.now();
+  if(pinLockUntil>now){
+    const secsLeft=Math.ceil((pinLockUntil-now)/1000);
+    const mins=Math.floor(secsLeft/60);const secs=secsLeft%60;
+    const sub=document.querySelector('.lock-sub');
+    sub.textContent='⏳ Zárolva: '+mins+':'+String(secs).padStart(2,'0');
+    sub.style.color='#ef4444';
+    document.querySelectorAll('.pin-btn').forEach(b=>b.disabled=true);
+    return true;
+  }
+  document.querySelectorAll('.pin-btn').forEach(b=>b.disabled=false);
+  const sub=document.querySelector('.lock-sub');
+  if(pinAttempts>0&&pinAttempts<5){
+    sub.textContent='Add meg a kódot ('+(5-pinAttempts)+' próba hátra)';
+    sub.style.color='#f59e0b';
+  }else{
+    sub.textContent='Add meg a kódot';
+    sub.style.color='#334155';
+  }
+  return false;
+}
+if(!isTrusted){checkLockout();setInterval(checkLockout,1000);}
+
+async function pinPress(num){
+  if(checkLockout())return;
   if(pinInput.length>=6)return;
   pinInput+=num;
   updatePinDots();
   if(pinInput.length===6){
-    if(pinInput===PIN_CODE){
-      // Helyes kód — eszköz megbízható, többé nem kéri
+    // Progresszív késleltetés
+    const delays=[0,0,0,5000,10000];
+    const delay=delays[Math.min(pinAttempts,4)];
+    if(delay>0){
+      document.querySelectorAll('.pin-btn').forEach(b=>b.disabled=true);
+      await new Promise(r=>setTimeout(r,delay));
+      document.querySelectorAll('.pin-btn').forEach(b=>b.disabled=false);
+    }
+    const hash=await sha256(pinInput);
+    if(hash===PIN_HASH){
       pinUnlocked=true;
       localStorage.setItem('mb_trusted_device','true');
+      localStorage.setItem('mb_pin_attempts','0');
+      localStorage.removeItem('mb_pin_lock_until');
       const dots=document.querySelectorAll('.pin-dot');
       dots.forEach(d=>{d.classList.add('filled');});
       setTimeout(()=>{
@@ -979,33 +1225,31 @@ function pinPress(num){
         document.getElementById('app-content').style.display='block';
       },300);
     } else {
-      // Hibás kód
+      pinAttempts++;
+      localStorage.setItem('mb_pin_attempts',pinAttempts.toString());
+      if(pinAttempts>=5){
+        // 15 perces lockout
+        pinLockUntil=Date.now()+900000;
+        localStorage.setItem('mb_pin_lock_until',pinLockUntil.toString());
+        pinAttempts=0;
+        localStorage.setItem('mb_pin_attempts','0');
+      }
       const dots=document.querySelectorAll('.pin-dot');
       dots.forEach(d=>{d.classList.add('wrong');});
       if(navigator.vibrate)navigator.vibrate([100,50,100]);
-      setTimeout(()=>{
-        pinInput='';
-        dots.forEach(d=>{d.classList.remove('wrong','filled');});
-      },600);
+      setTimeout(()=>{pinInput='';dots.forEach(d=>{d.classList.remove('wrong','filled');});checkLockout();},600);
     }
   }
 }
 
 function pinDelete(){
-  if(pinInput.length>0){
-    pinInput=pinInput.slice(0,-1);
-    updatePinDots();
-  }
+  if(pinInput.length>0){pinInput=pinInput.slice(0,-1);updatePinDots();}
 }
 
 function updatePinDots(){
   const dots=document.querySelectorAll('.pin-dot');
-  dots.forEach((d,i)=>{
-    d.classList.toggle('filled',i<pinInput.length);
-  });
+  dots.forEach((d,i)=>{d.classList.toggle('filled',i<pinInput.length);});
 }
-
-// Megbízható eszközön SOHA nem zárol újra
 </script>
 </body>
 </html>
