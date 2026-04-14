@@ -15,114 +15,114 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-body{background:#020a14;color:#cbd5e1;padding:12px;min-height:100vh}
-h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
+body{background:var(--bg-deep,#020a14);color:var(--text-secondary,#cbd5e1);padding:12px;min-height:100vh;transition:background .3s,color .3s}
+h1{font-size:18px;font-weight:800;color:var(--text-primary,#e0f2fe);letter-spacing:1px}
 .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .hdr-btns{display:flex;gap:6px}
-.clock{font-size:50px;font-weight:800;letter-spacing:5px;text-align:center;color:#e0f2fe;
-       text-shadow:0 0 30px rgba(29,78,216,0.8);line-height:1}
-.date{text-align:center;color:#334155;font-size:13px;margin:4px 0 14px}
-.card{background:#040f1f;border-radius:14px;padding:14px;margin-bottom:10px;
-      border:1px solid #0f2a50}
-.system-card{background:linear-gradient(160deg,#030c1e,#020812);border-radius:14px;
-             padding:14px;margin-bottom:10px;border:2px solid #2563eb;
-             box-shadow:0 0 20px rgba(37,99,235,0.15),inset 0 0 30px rgba(37,99,235,0.05)}
-.sec{color:#2563eb;font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:10px}
-.sys-hdr{color:#1d4ed8;font-size:10px;font-weight:700;letter-spacing:3px;
+.clock{font-size:50px;font-weight:800;letter-spacing:5px;text-align:center;color:var(--text-primary,#e0f2fe);
+       text-shadow:0 0 30px var(--glow,rgba(29,78,216,0.8));line-height:1}
+.date{text-align:center;color:var(--text-muted,#334155);font-size:13px;margin:4px 0 14px}
+.card{background:var(--bg-card,#040f1f);border-radius:14px;padding:14px;margin-bottom:10px;
+      border:1px solid var(--border,#0f2a50);transition:background .3s,border-color .3s}
+.system-card{background:var(--bg-card,#040f1f);border-radius:14px;
+             padding:14px;margin-bottom:10px;border:2px solid var(--blue,#2563eb);
+             box-shadow:0 0 20px var(--glow,rgba(37,99,235,0.15))}
+.sec{color:var(--blue,#2563eb);font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:10px}
+.sys-hdr{color:var(--blue-dark,#1d4ed8);font-size:10px;font-weight:700;letter-spacing:3px;
          font-family:'Courier New',monospace;margin-bottom:8px}
 .wgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.wlbl{color:#2563eb;font-size:10px;font-weight:700;letter-spacing:1.5px;margin-bottom:4px}
-.wico{font-size:36px;line-height:1.1}.wtemp{font-size:28px;font-weight:800;color:#e0f2fe}
-.wdesc{color:#64748b;font-size:12px}.wmeta{color:#334155;font-size:10px;margin-top:3px}
-.ev,.task{padding:3px 0 3px 10px;font-size:13px;color:#cbd5e1}
-.ev::before{content:"• ";color:#2563eb}.task.done{color:#1e3a6e;text-decoration:line-through}
-.ev-day,.task-cat{color:#2563eb;font-size:11px;font-weight:700;letter-spacing:1px;
+.wlbl{color:var(--blue,#2563eb);font-size:10px;font-weight:700;letter-spacing:1.5px;margin-bottom:4px}
+.wico{font-size:36px;line-height:1.1}.wtemp{font-size:28px;font-weight:800;color:var(--text-primary,#e0f2fe)}
+.wdesc{color:var(--text-dim,#64748b);font-size:12px}.wmeta{color:var(--text-muted,#334155);font-size:10px;margin-top:3px}
+.ev,.task{padding:3px 0 3px 10px;font-size:13px;color:var(--text-secondary,#cbd5e1)}
+.ev::before{content:"• ";color:var(--blue,#2563eb)}.task.done{color:var(--text-muted,#1e3a6e);text-decoration:line-through}
+.ev-day,.task-cat{color:var(--blue,#2563eb);font-size:11px;font-weight:700;letter-spacing:1px;
                   margin-top:8px;margin-bottom:2px;text-transform:uppercase}
 .lvl-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
-.lvl{font-size:22px;font-weight:800;color:#e0f2fe}
-.rnk{font-size:13px;font-weight:700}.strk{color:#334155;font-size:12px}
-.rank-title{color:#334155;font-size:11px;font-style:italic;margin-bottom:8px}
-.xpbar{background:#020a14;border-radius:5px;height:10px;margin:6px 0 2px;
-       border:1px solid #0f2a50;overflow:hidden}
-.xpfill{height:100%;background:linear-gradient(to right,#1d4ed8,#7c3aed,#2563eb);
+.lvl{font-size:22px;font-weight:800;color:var(--text-primary,#e0f2fe)}
+.rnk{font-size:13px;font-weight:700}.strk{color:var(--text-muted,#334155);font-size:12px}
+.rank-title{color:var(--text-muted,#334155);font-size:11px;font-style:italic;margin-bottom:8px}
+.xpbar{background:var(--bg-deep,#020a14);border-radius:5px;height:10px;margin:6px 0 2px;
+       border:1px solid var(--border,#0f2a50);overflow:hidden}
+.xpfill{height:100%;background:var(--gradient,linear-gradient(to right,#1d4ed8,#7c3aed,#2563eb));
         border-radius:5px;transition:width .8s ease}
-.xptxt{color:#334155;font-size:10px;margin-bottom:10px}
-.qname{color:#2563eb;font-size:14px;font-weight:700;
+.xptxt{color:var(--text-muted,#334155);font-size:10px;margin-bottom:10px}
+.qname{color:var(--blue,#2563eb);font-size:14px;font-weight:700;
        font-family:'Courier New',monospace;margin-bottom:2px}
-.qsub{color:#64748b;font-size:11px;margin-bottom:10px}
+.qsub{color:var(--text-dim,#64748b);font-size:11px;margin-bottom:10px}
 .task-check{display:flex;align-items:center;gap:10px;padding:5px 0;cursor:pointer}
-.task-check input[type=checkbox]{width:20px;height:20px;accent-color:#2563eb;cursor:pointer}
-.task-check.done-task label{color:#1e3a6e;text-decoration:line-through}
-.task-check label{font-size:14px;color:#cbd5e1;cursor:pointer}
+.task-check input[type=checkbox]{width:20px;height:20px;accent-color:var(--blue,#2563eb);cursor:pointer}
+.task-check.done-task label{color:var(--text-muted,#1e3a6e);text-decoration:line-through}
+.task-check label{font-size:14px;color:var(--text-secondary,#cbd5e1);cursor:pointer}
 .btn{display:block;width:100%;border:none;border-radius:10px;padding:13px;
      font-size:14px;font-weight:700;margin-top:12px;cursor:pointer;
-     background:#0a1a3a;color:#3b82f6;border:1px solid #2563eb;
+     background:var(--bg-accent,#0a1a3a);color:var(--blue,#3b82f6);border:1px solid var(--blue,#2563eb);
      font-family:'Courier New',monospace;transition:all .2s}
-.btn:disabled{background:#062717;color:#22c55e;border-color:#16a34a;cursor:default}
+.btn:disabled{background:#062717;color:var(--green,#22c55e);border-color:#16a34a;cursor:default}
 .btn:active:not(:disabled){opacity:.7}
-.ref{background:transparent;color:#60a5fa;border:1px solid #1e3a6e;border-radius:8px;
+.ref{background:transparent;color:var(--cyan,#60a5fa);border:1px solid var(--border,#1e3a6e);border-radius:8px;
      padding:6px 14px;font-size:12px;cursor:pointer}
 .news-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.news-tab-btn{background:#040f1f;color:#4a6fa5;border:1px solid #0f2a50;
+.news-tab-btn{background:var(--bg-card,#040f1f);color:var(--text-dim,#4a6fa5);border:1px solid var(--border,#0f2a50);
               border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer}
-.news-tab-btn.active{background:#1d4ed8;color:#e0f2fe;border-color:#2563eb}
-.article{background:#040f1f;border-radius:10px;border:1px solid #0f2a50;
+.news-tab-btn.active{background:var(--blue-dark,#1d4ed8);color:var(--text-primary,#e0f2fe);border-color:var(--blue,#2563eb)}
+.article{background:var(--bg-card,#040f1f);border-radius:10px;border:1px solid var(--border,#0f2a50);
          padding:10px;margin-bottom:8px;cursor:pointer;text-decoration:none;display:block}
-.article:active{background:#071628}
-.art-badge{background:#0a1f3d;color:#60a5fa;border-radius:4px;font-size:10px;
+.article:active{background:var(--bg-accent,#071628)}
+.art-badge{background:var(--bg-accent,#0a1f3d);color:var(--cyan,#60a5fa);border-radius:4px;font-size:10px;
            font-weight:700;padding:2px 6px;display:inline-block;margin-bottom:4px}
-.art-title{color:#e0f2fe;font-size:13px;font-weight:600;line-height:1.3;margin-bottom:3px}
-.art-desc{color:#334155;font-size:11px;line-height:1.4}
+.art-title{color:var(--text-primary,#e0f2fe);font-size:13px;font-weight:600;line-height:1.3;margin-bottom:3px}
+.art-desc{color:var(--text-muted,#334155);font-size:11px;line-height:1.4}
 .main-tabs{display:flex;gap:0;margin-bottom:16px;
-           background:#040f1f;border-radius:10px;padding:4px;border:1px solid #0f2a50}
-.main-tab-btn{flex:1;background:transparent;color:#4a6fa5;border:none;padding:11px 8px;
+           background:var(--bg-card,#040f1f);border-radius:10px;padding:4px;border:1px solid var(--border,#0f2a50);transition:background .3s}
+.main-tab-btn{flex:1;background:transparent;color:var(--text-dim,#4a6fa5);border:none;padding:11px 8px;
               font-size:15px;font-weight:600;cursor:pointer;border-radius:8px;
               transition:all .2s;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-.main-tab-btn.active{background:#1d4ed8;color:#e0f2fe}
+.main-tab-btn.active{background:var(--blue-dark,#1d4ed8);color:var(--text-primary,#e0f2fe)}
 .rec-item{display:flex;align-items:center;gap:12px;padding:10px 0;
-          border-bottom:1px solid #0a1f3d;cursor:pointer}
+          border-bottom:1px solid var(--bg-accent,#0a1f3d);cursor:pointer}
 .rec-item:last-child{border-bottom:none}
-.rec-item input[type=checkbox]{width:22px;height:22px;accent-color:#2563eb;
+.rec-item input[type=checkbox]{width:22px;height:22px;accent-color:var(--blue,#2563eb);
                                 cursor:pointer;flex-shrink:0}
-.rec-item label{font-size:15px;color:#cbd5e1;cursor:pointer;line-height:1.3}
-.rec-item.done label{color:#1e3a6e;text-decoration:line-through}
+.rec-item label{font-size:15px;color:var(--text-secondary,#cbd5e1);cursor:pointer;line-height:1.3}
+.rec-item.done label{color:var(--text-muted,#1e3a6e);text-decoration:line-through}
 .task-check input[type=checkbox]{width:20px;height:20px}
 .task-check label{font-size:14px}
 /* Settings panel */
 .settings-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;
                    background:rgba(0,0,0,.85);z-index:9998;padding:20px;overflow-y:auto}
 .settings-overlay.open{display:block}
-.settings-card{background:#040f1f;border:1px solid #2563eb;border-radius:14px;
-               padding:20px;max-width:400px;margin:40px auto}
-.settings-card h2{color:#e0f2fe;font-size:16px;margin-bottom:16px}
-.settings-card label{color:#60a5fa;font-size:12px;font-weight:700;letter-spacing:1px;
+.settings-card{background:var(--bg-card,#040f1f);border:1px solid var(--blue,#2563eb);border-radius:14px;
+               padding:20px;max-width:400px;margin:40px auto;transition:background .3s}
+.settings-card h2{color:var(--text-primary,#e0f2fe);font-size:16px;margin-bottom:16px}
+.settings-card label{color:var(--cyan,#60a5fa);font-size:12px;font-weight:700;letter-spacing:1px;
                       display:block;margin-bottom:4px}
-.settings-card input{width:100%;background:#020a14;color:#e0f2fe;border:1px solid #0f2a50;
+.settings-card input{width:100%;background:var(--bg-deep,#020a14);color:var(--text-primary,#e0f2fe);border:1px solid var(--border,#0f2a50);
                       border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:14px}
-.settings-card input:focus{outline:none;border-color:#2563eb}
-.settings-card .note{color:#334155;font-size:11px;margin-top:-10px;margin-bottom:14px}
+.settings-card input:focus{outline:none;border-color:var(--blue,#2563eb)}
+.settings-card .note{color:var(--text-muted,#334155);font-size:11px;margin-top:-10px;margin-bottom:14px}
 .conn-status{padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;
              text-align:center;margin-bottom:14px}
 .conn-ok{background:#062717;color:#22c55e;border:1px solid #16a34a}
 .conn-fail{background:#2a0a0a;color:#f87171;border:1px solid #ef4444}
-.habit-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #0a1f3d;cursor:pointer}
+.habit-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bg-accent,#0a1f3d);cursor:pointer}
 .habit-item:last-child{border-bottom:none}
-.habit-item input[type=checkbox]{width:22px;height:22px;accent-color:#2563eb;cursor:pointer;flex-shrink:0}
-.habit-item label{font-size:15px;color:#cbd5e1;cursor:pointer;line-height:1.3;flex:1}
-.habit-item.done label{color:#1e3a6e;text-decoration:line-through}
-.habit-time{color:#334155;font-size:10px}
-.habit-streak{color:#f59e0b;font-size:11px;font-weight:600}
+.habit-item input[type=checkbox]{width:22px;height:22px;accent-color:var(--blue,#2563eb);cursor:pointer;flex-shrink:0}
+.habit-item label{font-size:15px;color:var(--text-secondary,#cbd5e1);cursor:pointer;line-height:1.3;flex:1}
+.habit-item.done label{color:var(--text-muted,#1e3a6e);text-decoration:line-through}
+.habit-time{color:var(--text-muted,#334155);font-size:10px}
+.habit-streak{color:var(--yellow,#f59e0b);font-size:11px;font-weight:600}
 .habit-add-btn{background:transparent;color:#2563eb;border:1px dashed #1e3a6e;border-radius:10px;padding:10px;width:100%;font-size:13px;cursor:pointer;margin-top:8px}
 .habit-add-btn:active{background:#040f1f}
 .habit-edit-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9998;padding:20px;overflow-y:auto}
 .habit-edit-overlay.open{display:block}
-.habit-edit-card{background:#040f1f;border:1px solid #2563eb;border-radius:14px;padding:20px;max-width:400px;margin:40px auto}
-.habit-edit-card h2{color:#e0f2fe;font-size:16px;margin-bottom:16px}
-.habit-edit-card label{color:#60a5fa;font-size:12px;font-weight:700;letter-spacing:1px;display:block;margin-bottom:4px}
-.habit-edit-card input,.habit-edit-card select{width:100%;background:#020a14;color:#e0f2fe;border:1px solid #0f2a50;border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:14px}
+.habit-edit-card{background:var(--bg-card,#040f1f);border:1px solid var(--blue,#2563eb);border-radius:14px;padding:20px;max-width:400px;margin:40px auto}
+.habit-edit-card h2{color:var(--text-primary,#e0f2fe);font-size:16px;margin-bottom:16px}
+.habit-edit-card label{color:var(--cyan,#60a5fa);font-size:12px;font-weight:700;letter-spacing:1px;display:block;margin-bottom:4px}
+.habit-edit-card input,.habit-edit-card select{width:100%;background:var(--bg-deep,#020a14);color:var(--text-primary,#e0f2fe);border:1px solid var(--border,#0f2a50);border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:14px}
 .emoji-picker{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .emoji-opt{font-size:24px;padding:6px;border-radius:8px;cursor:pointer;background:transparent;border:2px solid transparent}
-.emoji-opt.selected{border-color:#2563eb;background:#0a1a3a}
+.emoji-opt.selected{border-color:var(--blue,#2563eb);background:var(--bg-accent,#0a1a3a)}
 .habit-del{color:#f87171;font-size:12px;cursor:pointer;text-align:center;margin-top:10px;padding:8px}
 .heatmap{display:flex;gap:2px;flex-wrap:wrap;margin-top:8px}
 .heatmap-day{width:12px;height:12px;border-radius:2px;background:#0a1f3d}
@@ -136,23 +136,207 @@ h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .ref.loading{animation:spin 1s linear infinite}
 /* Lock screen */
-.lock-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:#020a14;z-index:99999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px}
+.lock-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--lock-bg,#020a14);z-index:99999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;transition:background .3s}
 .lock-screen.hidden{display:none}
 .lock-icon{font-size:48px;margin-bottom:20px}
-.lock-title{color:#e0f2fe;font-size:18px;font-weight:700;margin-bottom:6px}
-.lock-sub{color:#334155;font-size:12px;margin-bottom:30px}
+.lock-title{color:var(--text-primary,#e0f2fe);font-size:18px;font-weight:700;margin-bottom:6px}
+.lock-sub{color:var(--text-muted,#334155);font-size:12px;margin-bottom:30px}
 .pin-dots{display:flex;gap:14px;margin-bottom:30px}
-.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid #1e3a6e;background:transparent;transition:all .2s}
-.pin-dot.filled{background:#2563eb;border-color:#2563eb;box-shadow:0 0 8px rgba(37,99,235,0.5)}
-.pin-dot.wrong{background:#ef4444;border-color:#ef4444;box-shadow:0 0 8px rgba(239,68,68,0.5)}
+.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--lock-dot,#1e3a6e);background:transparent;transition:all .2s}
+.pin-dot.filled{background:var(--lock-active,#2563eb);border-color:var(--lock-active,#2563eb);box-shadow:0 0 8px var(--glow,rgba(37,99,235,0.5))}
+.pin-dot.wrong{background:var(--red,#ef4444);border-color:var(--red,#ef4444);box-shadow:0 0 8px rgba(239,68,68,0.5)}
 .pin-grid{display:grid;grid-template-columns:repeat(3,72px);gap:12px}
-.pin-btn{width:72px;height:72px;border-radius:50%;background:#040f1f;border:1px solid #0f2a50;
-  color:#e0f2fe;font-size:28px;font-weight:600;cursor:pointer;display:flex;align-items:center;
+.pin-btn{width:72px;height:72px;border-radius:50%;background:var(--lock-btn,#040f1f);border:1px solid var(--lock-border,#0f2a50);
+  color:var(--text-primary,#e0f2fe);font-size:28px;font-weight:600;cursor:pointer;display:flex;align-items:center;
   justify-content:center;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.pin-btn:active{background:#1d4ed8;border-color:#2563eb;transform:scale(0.92)}
+.pin-btn:active{background:var(--lock-active,#1d4ed8);border-color:var(--blue,#2563eb);transform:scale(0.92)}
 .pin-btn.empty{visibility:hidden}
-.pin-btn.del{font-size:18px;color:#64748b}
+.pin-btn.del{font-size:18px;color:var(--text-dim,#64748b)}
+@keyframes fadeIn{from{opacity:0;transform:translate(-50%,-50%) scale(0.8)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+/* ── CSS VARIABLES (Theming) ── */
+/* DEFAULT: Solo Leveling — dark navy + blue */
+:root{--bg-deep:#020a14;--bg-card:#040f1f;--bg-accent:#0a1f3d;--border:#0f2a50;
+  --text-primary:#e0f2fe;--text-secondary:#cbd5e1;--text-muted:#334155;--text-dim:#64748b;
+  --blue:#2563eb;--blue-dark:#1d4ed8;--purple:#7c3aed;--green:#22c55e;--red:#ef4444;
+  --yellow:#f59e0b;--cyan:#60a5fa;
+  --lock-bg:#020a14;--lock-btn:#040f1f;--lock-border:#0f2a50;--lock-dot:#1e3a6e;--lock-active:#2563eb;
+  --glow:rgba(37,99,235,0.5);--gradient:linear-gradient(to right,#1d4ed8,#7c3aed,#2563eb)}
+/* SPOTIFY: pure black + green — inspired by Spotify */
+[data-theme="spotify"]{--bg-deep:#000000;--bg-card:#121212;--bg-accent:#1a1a1a;--border:#282828;
+  --text-primary:#ffffff;--text-secondary:#b3b3b3;--text-muted:#535353;--text-dim:#727272;
+  --blue:#1DB954;--blue-dark:#1aa34a;--purple:#1DB954;--green:#1DB954;--cyan:#1ed760;--yellow:#f59e0b;--red:#e91429;
+  --lock-bg:#000000;--lock-btn:#121212;--lock-border:#282828;--lock-dot:#535353;--lock-active:#1DB954;
+  --glow:rgba(29,185,84,0.5);--gradient:linear-gradient(to right,#1DB954,#1ed760)}
+/* DISCORD: dark charcoal + blurple — inspired by Discord */
+[data-theme="discord"]{--bg-deep:#1e1f22;--bg-card:#2b2d31;--bg-accent:#383a40;--border:#3f4147;
+  --text-primary:#f2f3f5;--text-secondary:#dbdee1;--text-muted:#6d6f78;--text-dim:#949ba4;
+  --blue:#5865F2;--blue-dark:#4752c4;--purple:#5865F2;--cyan:#949cf7;--yellow:#fee75c;--red:#ed4245;--green:#57f287;
+  --lock-bg:#1e1f22;--lock-btn:#2b2d31;--lock-border:#3f4147;--lock-dot:#6d6f78;--lock-active:#5865F2;
+  --glow:rgba(88,101,242,0.5);--gradient:linear-gradient(to right,#5865F2,#eb459e)}
+/* NETFLIX: pure black + red — inspired by Netflix */
+[data-theme="netflix"]{--bg-deep:#000000;--bg-card:#141414;--bg-accent:#1f1f1f;--border:#2a2a2a;
+  --text-primary:#ffffff;--text-secondary:#e5e5e5;--text-muted:#757575;--text-dim:#808080;
+  --blue:#e50914;--blue-dark:#b81d24;--purple:#e50914;--cyan:#f5484e;--yellow:#e8b600;--red:#e50914;--green:#46d369;
+  --lock-bg:#000000;--lock-btn:#141414;--lock-border:#2a2a2a;--lock-dot:#757575;--lock-active:#e50914;
+  --glow:rgba(229,9,20,0.5);--gradient:linear-gradient(to right,#e50914,#b81d24)}
+/* CYBERPUNK: deep black + neon cyan/magenta — inspired by Cyberpunk 2077 */
+[data-theme="cyber"]{--bg-deep:#0a0a0f;--bg-card:#12121a;--bg-accent:#1a1a2e;--border:#2a1a3a;
+  --text-primary:#e0f7fa;--text-secondary:#b2ebf2;--text-muted:#4a4a6a;--text-dim:#6a6a8a;
+  --blue:#00e5ff;--blue-dark:#00b8d4;--purple:#e040fb;--cyan:#00e5ff;--yellow:#eeff41;--red:#ff1744;--green:#76ff03;
+  --lock-bg:#0a0a0f;--lock-btn:#12121a;--lock-border:#2a1a3a;--lock-dot:#4a4a6a;--lock-active:#00e5ff;
+  --glow:rgba(0,229,255,0.5);--gradient:linear-gradient(to right,#00e5ff,#e040fb)}
+/* MONO: pure black + white — clean monochrome */
+[data-theme="mono"]{--bg-deep:#000000;--bg-card:#0a0a0a;--bg-accent:#141414;--border:#222222;
+  --text-primary:#ffffff;--text-secondary:#cccccc;--text-muted:#555555;--text-dim:#777777;
+  --blue:#ffffff;--blue-dark:#cccccc;--purple:#999999;--cyan:#ffffff;--yellow:#ffffff;--red:#ff4444;--green:#44ff44;
+  --lock-bg:#000000;--lock-btn:#0a0a0a;--lock-border:#222222;--lock-dot:#555555;--lock-active:#ffffff;
+  --glow:rgba(255,255,255,0.3);--gradient:linear-gradient(to right,#ffffff,#999999)}
+/* ROSE: dark + rose gold/pink — inspired by Apple Rose Gold */
+[data-theme="rose"]{--bg-deep:#0f0a0c;--bg-card:#1a1215;--bg-accent:#2d1f24;--border:#3d2a30;
+  --text-primary:#fce4ec;--text-secondary:#f8bbd0;--text-muted:#5d3a45;--text-dim:#8d6a75;
+  --blue:#ec407a;--blue-dark:#c2185b;--purple:#f06292;--cyan:#f48fb1;--yellow:#ffd54f;--red:#ef5350;--green:#81c784;
+  --lock-bg:#0f0a0c;--lock-btn:#1a1215;--lock-border:#3d2a30;--lock-dot:#5d3a45;--lock-active:#ec407a;
+  --glow:rgba(236,64,122,0.5);--gradient:linear-gradient(to right,#ec407a,#f06292)}
+/* DRACULA: dark purple — inspired by Dracula Theme (VS Code) */
+[data-theme="dracula"]{--bg-deep:#282a36;--bg-card:#2d2f3d;--bg-accent:#383a4a;--border:#44475a;
+  --text-primary:#f8f8f2;--text-secondary:#f8f8f2;--text-muted:#6272a4;--text-dim:#6272a4;
+  --blue:#bd93f9;--blue-dark:#9580d1;--purple:#ff79c6;--cyan:#8be9fd;--yellow:#f1fa8c;--red:#ff5555;--green:#50fa7b;
+  --lock-bg:#282a36;--lock-btn:#2d2f3d;--lock-border:#44475a;--lock-dot:#6272a4;--lock-active:#bd93f9;
+  --glow:rgba(189,147,249,0.5);--gradient:linear-gradient(to right,#bd93f9,#ff79c6)}
+/* NORD: cool blue-gray — inspired by Nord color scheme */
+[data-theme="nord"]{--bg-deep:#2e3440;--bg-card:#3b4252;--bg-accent:#434c5e;--border:#4c566a;
+  --text-primary:#eceff4;--text-secondary:#d8dee9;--text-muted:#616e88;--text-dim:#7b88a1;
+  --blue:#88c0d0;--blue-dark:#81a1c1;--purple:#b48ead;--cyan:#88c0d0;--yellow:#ebcb8b;--red:#bf616a;--green:#a3be8c;
+  --lock-bg:#2e3440;--lock-btn:#3b4252;--lock-border:#4c566a;--lock-dot:#616e88;--lock-active:#88c0d0;
+  --glow:rgba(136,192,208,0.5);--gradient:linear-gradient(to right,#81a1c1,#88c0d0)}
+/* LIGHT: clean white — inspired by Apple/iOS */
+[data-theme="light"]{--bg-deep:#f2f2f7;--bg-card:#ffffff;--bg-accent:#e5e5ea;--border:#d1d1d6;
+  --text-primary:#1c1c1e;--text-secondary:#3a3a3c;--text-muted:#aeaeb2;--text-dim:#8e8e93;
+  --blue:#007aff;--blue-dark:#0056b3;--purple:#af52de;--cyan:#5ac8fa;--yellow:#ff9500;--red:#ff3b30;--green:#34c759;
+  --lock-bg:#f2f2f7;--lock-btn:#ffffff;--lock-border:#d1d1d6;--lock-dot:#aeaeb2;--lock-active:#007aff;
+  --glow:rgba(0,122,255,0.3);--gradient:linear-gradient(to right,#007aff,#5856d6)}
+/* ── Scrollable tabs ── */
+.main-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap}
+.main-tabs::-webkit-scrollbar{display:none}
+.main-tab-btn{white-space:nowrap;min-width:auto;flex:0 0 auto;padding:11px 12px;font-size:13px}
+/* ── Sleep tracker ── */
+.sleep-row{display:flex;align-items:center;gap:10px;margin:8px 0}
+.sleep-btn{background:var(--bg-accent,#0a1f3d);color:var(--cyan,#60a5fa);border:1px solid var(--border,#0f2a50);
+  border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;flex:1}
+.sleep-btn:active{opacity:.7}
+.sleep-stars{display:flex;gap:4px}
+.sleep-star{font-size:24px;cursor:pointer;opacity:.3;transition:opacity .2s}
+.sleep-star.active{opacity:1}
+.sleep-summary{display:flex;align-items:center;gap:14px;padding:8px 0}
+/* ── Pomodoro ── */
+.pomo-mini{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.pomo-circle{width:60px;height:60px;position:relative}
+.pomo-circle svg{transform:rotate(-90deg)}
+.pomo-time{font-size:20px;font-weight:800;color:var(--text-primary,#e0f2fe);text-align:center}
+.pomo-btns{display:flex;gap:8px}
+.pomo-btn{background:var(--bg-accent,#0a1f3d);color:var(--cyan,#60a5fa);border:1px solid var(--border,#0f2a50);
+  border-radius:50%;width:40px;height:40px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.pomo-btn:active{opacity:.7}
+.pomo-full{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg-deep,#020a14);
+  z-index:9997;flex-direction:column;align-items:center;justify-content:center;padding:30px}
+.pomo-full.open{display:flex}
+.pomo-full .pomo-big-time{font-size:72px;font-weight:800;color:var(--text-primary,#e0f2fe);
+  text-shadow:0 0 40px rgba(37,99,235,0.5);margin:20px 0}
+.pomo-full .pomo-label{color:var(--text-muted,#334155);font-size:14px;letter-spacing:2px;font-weight:700}
+/* ── Finance ── */
+.fin-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.fin-box{background:var(--bg-accent,#0a1f3d);border-radius:10px;padding:12px;text-align:center}
+.fin-box .fin-amount{font-size:22px;font-weight:800;color:var(--text-primary,#e0f2fe)}
+.fin-box .fin-label{font-size:10px;color:var(--text-muted,#334155);letter-spacing:1px}
+.fin-cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.fin-cat-btn{background:var(--bg-card,#040f1f);border:1px solid var(--border,#0f2a50);border-radius:8px;
+  padding:8px 4px;font-size:11px;text-align:center;cursor:pointer;color:var(--text-secondary,#cbd5e1)}
+.fin-cat-btn.selected{border-color:var(--blue,#2563eb);background:var(--bg-accent,#0a1f3d)}
+.fin-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;
+  border-bottom:1px solid rgba(15,42,80,0.5);font-size:13px}
+.fin-item-cat{font-size:16px;margin-right:8px}
+.fin-budget-bar{background:var(--bg-deep,#020a14);border-radius:5px;height:12px;margin:6px 0;
+  border:1px solid var(--border,#0f2a50);overflow:hidden}
+.fin-budget-fill{height:100%;border-radius:5px;transition:width .8s}
+/* ── Goals ── */
+.goal-item{background:var(--bg-accent,#0a1f3d);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer}
+.goal-item:active{opacity:.8}
+.goal-hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.goal-icon{font-size:28px}
+.goal-name{font-size:15px;font-weight:700;color:var(--text-primary,#e0f2fe)}
+.goal-deadline{font-size:10px;color:var(--text-muted,#334155)}
+.goal-progress{background:var(--bg-deep,#020a14);border-radius:5px;height:8px;overflow:hidden;margin:6px 0}
+.goal-progress-fill{height:100%;background:linear-gradient(to right,var(--blue,#2563eb),var(--purple,#7c3aed));
+  border-radius:5px;transition:width .5s}
+.goal-pct{font-size:11px;color:var(--cyan,#60a5fa);font-weight:700}
+.goal-edit-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,.85);z-index:9998;padding:20px;overflow-y:auto}
+.goal-edit-overlay.open{display:block}
+.goal-edit-card{background:var(--bg-card,#040f1f);border:1px solid var(--blue,#2563eb);
+  border-radius:14px;padding:20px;max-width:400px;margin:40px auto}
+.goal-edit-card h2{color:var(--text-primary,#e0f2fe);font-size:16px;margin-bottom:16px}
+.goal-edit-card label{color:var(--cyan,#60a5fa);font-size:12px;font-weight:700;letter-spacing:1px;
+  display:block;margin-bottom:4px}
+.goal-edit-card input,.goal-edit-card select,.goal-edit-card textarea{width:100%;background:var(--bg-deep,#020a14);
+  color:var(--text-primary,#e0f2fe);border:1px solid var(--border,#0f2a50);border-radius:8px;
+  padding:10px 12px;font-size:14px;margin-bottom:14px;font-family:inherit}
+/* ── Stats ── */
+.stats-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.stat-card{background:var(--bg-accent,#0a1f3d);border-radius:10px;padding:12px;text-align:center}
+.stat-val{font-size:22px;font-weight:800;color:var(--text-primary,#e0f2fe)}
+.stat-lbl{font-size:10px;color:var(--text-muted,#334155);letter-spacing:1px}
+.stats-filter{display:flex;gap:6px;margin-bottom:12px}
+.stats-filter button{background:var(--bg-card,#040f1f);color:var(--text-dim,#64748b);border:1px solid var(--border,#0f2a50);
+  border-radius:6px;padding:6px 12px;font-size:11px;cursor:pointer}
+.stats-filter button.active{background:var(--blue-dark,#1d4ed8);color:var(--text-primary,#e0f2fe);border-color:var(--blue,#2563eb)}
+.chart-container{background:var(--bg-card,#040f1f);border-radius:12px;padding:14px;margin-bottom:12px;
+  border:1px solid var(--border,#0f2a50)}
+.chart-container canvas{max-height:200px}
+.chart-title{color:var(--cyan,#60a5fa);font-size:11px;font-weight:700;letter-spacing:1px;margin-bottom:8px}
+/* ── Achievement list ── */
+.ach-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,.85);z-index:9998;padding:20px;overflow-y:auto}
+.ach-overlay.open{display:block}
+.ach-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-accent,#0a1f3d);
+  border-radius:10px;margin-bottom:8px}
+.ach-item.locked{opacity:.35}
+.ach-icon{font-size:32px}
+.ach-name{font-size:14px;font-weight:700;color:var(--text-primary,#e0f2fe)}
+.ach-desc{font-size:11px;color:var(--text-dim,#64748b)}
+/* ── Avatar ── */
+.avatar{font-size:28px;margin-right:6px}
+/* ── Boss fight ── */
+.boss-card{background:linear-gradient(135deg,#1a0505,#020a14);border:2px solid #ef4444;
+  border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(239,68,68,0.15)}
+.boss-name{color:#ef4444;font-size:16px;font-weight:800;font-family:'Courier New',monospace}
+.boss-reward{color:#f59e0b;font-size:12px;margin-top:4px}
+/* ── Theme picker ── */
+.theme-grid{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.theme-swatch{width:40px;height:40px;border-radius:10px;cursor:pointer;border:2px solid transparent;
+  display:flex;align-items:center;justify-content:center;font-size:18px}
+.theme-swatch.selected{border-color:var(--blue,#2563eb);box-shadow:0 0 10px rgba(37,99,235,0.5)}
+/* ── Finance add overlay ── */
+.fin-add-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,.85);z-index:9998;padding:20px;overflow-y:auto}
+.fin-add-overlay.open{display:block}
+/* ── Responsive ── */
+@media(min-width:768px){
+  .main-content-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .main-content-grid>.card,.main-content-grid>.system-card{margin-bottom:0}
+  .stats-cards{grid-template-columns:repeat(4,1fr)}
+  .fin-cat-grid{grid-template-columns:repeat(8,1fr)}
+}
+@media(min-width:1024px){
+  body{max-width:1000px;margin:0 auto}
+  .main-content-grid{grid-template-columns:1fr 1fr 1fr}
+}
+/* ── PWA Install banner ── */
+.install-banner{position:fixed;bottom:20px;left:20px;right:20px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);
+  border-radius:14px;padding:16px;display:none;z-index:9990;text-align:center;
+  box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+.install-banner button{background:#fff;color:#1d4ed8;border:none;border-radius:8px;padding:8px 20px;
+  font-weight:700;cursor:pointer;margin:0 4px}
 </style>
 </head>
 <body>
@@ -184,18 +368,25 @@ h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
 
 <div id="app-content" style="display:none">
 <div class="hdr">
-  <div>
-    <h1>Morning Briefing</h1>
-    <div class="hdr-net" id="net-status"><span class="net-dot net-online"></span> Online</div>
+  <div style="display:flex;align-items:center;gap:6px">
+    <span class="avatar" id="hdr-avatar">🐣</span>
+    <div>
+      <h1>Morning Briefing</h1>
+      <div class="hdr-net" id="net-status"><span class="net-dot net-online"></span> Online</div>
+    </div>
   </div>
   <div class="hdr-btns">
+    <button class="ref" onclick="openAchList()">🏆</button>
     <button class="ref" id="refresh-btn" onclick="refreshAll()">🔄</button>
     <button class="ref" onclick="openSettings()">⚙️</button>
   </div>
 </div>
-<div class="main-tabs">
+<div class="main-tabs" id="main-tabs">
   <button class="main-tab-btn active" id="mtab-morning" onclick="switchTab('morning')">🌄 Reggeli</button>
   <button class="main-tab-btn" id="mtab-news" onclick="switchTab('news')">📡 Hírek</button>
+  <button class="main-tab-btn" id="mtab-stats" onclick="switchTab('stats')">📊 Stats</button>
+  <button class="main-tab-btn" id="mtab-finance" onclick="switchTab('finance')">💰 Pénz</button>
+  <button class="main-tab-btn" id="mtab-goals" onclick="switchTab('goals')">🎯 Célok</button>
 </div>
 
 <!-- ═══ REGGELI FÜL ═══ -->
@@ -214,6 +405,21 @@ h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
 <div class="card" id="cal-card">
   <div class="sec">📅 NAPTÁR — iPHONE</div>
   <div id="cal"><div style="color:#334155">Betöltés...</div></div>
+</div>
+
+<div class="card" id="sleep-card">
+  <div class="sec">😴 ALVÁS TRACKER</div>
+  <div id="sleep-content"></div>
+</div>
+
+<div class="card" id="mood-card">
+  <div class="sec">😊 HANGULAT & ENERGIA</div>
+  <div id="mood-content"></div>
+</div>
+
+<div class="card" id="pomo-mini-card">
+  <div class="sec">🍅 POMODORO</div>
+  <div id="pomo-mini-content"></div>
 </div>
 
 <div class="card">
@@ -266,6 +472,115 @@ h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
 </div>
 </div>
 
+<!-- ═══ STATISZTIKÁK FÜL ═══ -->
+<div id="tab-stats" style="display:none">
+<div class="stats-filter" id="stats-filter">
+  <button class="active" onclick="setStatsPeriod(7)">7 nap</button>
+  <button onclick="setStatsPeriod(30)">30 nap</button>
+  <button onclick="setStatsPeriod(90)">90 nap</button>
+</div>
+<div class="stats-cards" id="stats-summary"></div>
+<div class="chart-container"><div class="chart-title">📈 XP NÖVEKEDÉS</div><canvas id="chart-xp"></canvas></div>
+<div class="chart-container"><div class="chart-title">✅ SZOKÁS TELJESÍTÉS</div><canvas id="chart-habits"></canvas></div>
+<div class="chart-container"><div class="chart-title">😊 HANGULAT TREND</div><canvas id="chart-mood"></canvas></div>
+<div class="chart-container"><div class="chart-title">😴 ALVÁS TREND</div><canvas id="chart-sleep"></canvas></div>
+<div class="chart-container"><div class="chart-title">💰 KIADÁSOK</div><canvas id="chart-finance"></canvas></div>
+</div>
+
+<!-- ═══ PÉNZTÁRCA FÜL ═══ -->
+<div id="tab-finance" style="display:none">
+<div class="card">
+  <div class="sec" style="display:flex;justify-content:space-between;align-items:center">
+    <span>💰 PÉNZTÁRCA</span>
+    <button onclick="openFinAdd()" style="background:transparent;border:1px solid #1e3a6e;color:#60a5fa;border-radius:6px;padding:2px 8px;font-size:10px;cursor:pointer">+ Új</button>
+  </div>
+  <div class="fin-summary" id="fin-summary"></div>
+  <div id="fin-budget"></div>
+  <div class="sec" style="margin-top:12px">UTOLSÓ KIADÁSOK</div>
+  <div id="fin-list"></div>
+</div>
+</div>
+
+<!-- ═══ CÉLOK FÜL ═══ -->
+<div id="tab-goals" style="display:none">
+<div class="card">
+  <div class="sec" style="display:flex;justify-content:space-between;align-items:center">
+    <span>🎯 CÉLOK</span>
+    <button onclick="openGoalEdit()" style="background:transparent;border:1px solid #1e3a6e;color:#60a5fa;border-radius:6px;padding:2px 8px;font-size:10px;cursor:pointer">+ Új</button>
+  </div>
+  <div id="goals-list"></div>
+</div>
+</div>
+
+<!-- ═══ POMODORO TELJES KÉPERNYŐ ═══ -->
+<div class="pomo-full" id="pomo-full">
+  <div class="pomo-label" id="pomo-phase-label">MUNKA</div>
+  <div class="pomo-big-time" id="pomo-big-time">25:00</div>
+  <svg width="200" height="200" id="pomo-big-svg"><circle cx="100" cy="100" r="90" fill="none" stroke="#0f2a50" stroke-width="8"/><circle cx="100" cy="100" r="90" fill="none" stroke="#2563eb" stroke-width="8" stroke-dasharray="565.5" stroke-dashoffset="0" stroke-linecap="round" id="pomo-big-ring" style="transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset 1s linear"/></svg>
+  <div style="display:flex;gap:16px;margin-top:30px">
+    <button class="pomo-btn" style="width:56px;height:56px;font-size:22px" onclick="togglePomo()" id="pomo-play-btn">▶</button>
+    <button class="pomo-btn" style="width:56px;height:56px;font-size:22px" onclick="resetPomo()">⏹</button>
+    <button class="pomo-btn" style="width:56px;height:56px;font-size:18px" onclick="closePomo()">✕</button>
+  </div>
+  <div style="margin-top:20px;color:#334155;font-size:12px" id="pomo-session-info">Ma: 0/4 🍅</div>
+</div>
+
+<!-- ═══ CÉL SZERKESZTŐ ═══ -->
+<div class="goal-edit-overlay" id="goal-edit-overlay">
+<div class="goal-edit-card">
+  <h2 id="goal-edit-title">Új cél</h2>
+  <label>IKON</label>
+  <div class="emoji-picker" id="goal-emoji-picker"></div>
+  <label>CÉL NEVE</label>
+  <input type="text" id="goal-name" placeholder="pl. 10 kg fogyás">
+  <label>LEÍRÁS</label>
+  <textarea id="goal-desc" rows="2" placeholder="Opcionális leírás"></textarea>
+  <label>KATEGÓRIA</label>
+  <select id="goal-category">
+    <option value="fitness">💪 Fitness</option>
+    <option value="learning">📚 Tanulás</option>
+    <option value="finance">💰 Pénzügyek</option>
+    <option value="personal">🎯 Személyes</option>
+    <option value="career">💼 Karrier</option>
+  </select>
+  <label>HATÁRIDŐ</label>
+  <input type="date" id="goal-deadline">
+  <label>CÉLÉRTÉK (szám, 0 = checkbox típus)</label>
+  <input type="number" id="goal-target" value="0" min="0">
+  <button class="btn" onclick="saveGoal()" style="background:#062717;color:#22c55e;border-color:#16a34a">💾 Mentés</button>
+  <button class="btn" onclick="closeGoalEdit()" style="margin-top:8px;background:transparent;color:#64748b;border-color:#1e3a6e">Bezárás</button>
+  <div id="goal-del-btn" class="habit-del" style="display:none" onclick="deleteGoal()">🗑 Cél törlése</div>
+</div>
+</div>
+
+<!-- ═══ KIADÁS HOZZÁADÁS ═══ -->
+<div class="fin-add-overlay" id="fin-add-overlay">
+<div class="goal-edit-card">
+  <h2>Új kiadás</h2>
+  <label>ÖSSZEG (HUF)</label>
+  <input type="number" id="fin-amount" placeholder="pl. 2500">
+  <label>KATEGÓRIA</label>
+  <div class="fin-cat-grid" id="fin-cat-picker"></div>
+  <label>MEGJEGYZÉS (opcionális)</label>
+  <input type="text" id="fin-note" placeholder="pl. Ebéd">
+  <label>DÁTUM</label>
+  <input type="date" id="fin-date">
+  <button class="btn" onclick="saveExpense()" style="background:#062717;color:#22c55e;border-color:#16a34a">💾 Mentés</button>
+  <button class="btn" onclick="closeFinAdd()" style="margin-top:8px;background:transparent;color:#64748b;border-color:#1e3a6e">Bezárás</button>
+</div>
+</div>
+
+<!-- ═══ ACHIEVEMENT LISTA ═══ -->
+<div class="ach-overlay" id="ach-overlay">
+<div style="max-width:400px;margin:20px auto">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <h2 style="color:#f59e0b;font-size:18px">🏆 Achievementek</h2>
+    <button onclick="closeAchList()" style="background:transparent;border:none;color:#64748b;font-size:20px;cursor:pointer">✕</button>
+  </div>
+  <div id="ach-list"></div>
+</div>
+</div>
+
 <!-- ═══ BEÁLLÍTÁSOK ═══ -->
 <div class="settings-overlay" id="settings-overlay">
 <div class="settings-card">
@@ -280,14 +595,51 @@ h1{font-size:18px;font-weight:800;color:#e0f2fe;letter-spacing:1px}
   <button class="btn" onclick="saveSettings()" style="background:#062717;color:#22c55e;border-color:#16a34a">💾 Mentés</button>
   <button class="btn" onclick="closeSettings()" style="margin-top:8px;background:transparent;color:#64748b;border-color:#1e3a6e">Bezárás</button>
   <div style="margin-top:20px;border-top:1px solid #0f2a50;padding-top:14px">
+    <label>TÉMA</label>
+    <div class="theme-grid" id="theme-grid">
+      <div class="theme-swatch selected" onclick="setTheme('dark')" style="background:#020a14;border:1px solid #2563eb" title="Solo Leveling">⚔️</div>
+      <div class="theme-swatch" onclick="setTheme('spotify')" style="background:#000;border:1px solid #1DB954" title="Spotify">🟢</div>
+      <div class="theme-swatch" onclick="setTheme('discord')" style="background:#1e1f22;border:1px solid #5865F2" title="Discord">🟣</div>
+      <div class="theme-swatch" onclick="setTheme('netflix')" style="background:#000;border:1px solid #e50914" title="Netflix">🔴</div>
+      <div class="theme-swatch" onclick="setTheme('cyber')" style="background:#0a0a0f;border:1px solid #00e5ff" title="Cyberpunk">💠</div>
+      <div class="theme-swatch" onclick="setTheme('mono')" style="background:#000;border:1px solid #fff" title="Monochrome">⚪</div>
+      <div class="theme-swatch" onclick="setTheme('rose')" style="background:#0f0a0c;border:1px solid #ec407a" title="Rose">🌸</div>
+      <div class="theme-swatch" onclick="setTheme('dracula')" style="background:#282a36;border:1px solid #bd93f9" title="Dracula">🧛</div>
+      <div class="theme-swatch" onclick="setTheme('nord')" style="background:#2e3440;border:1px solid #88c0d0" title="Nord">❄️</div>
+      <div class="theme-swatch" onclick="setTheme('light')" style="background:#f2f2f7;border:1px solid #007aff" title="Light">☀️</div>
+    </div>
+  </div>
+  <div style="margin-top:14px;border-top:1px solid #0f2a50;padding-top:14px">
+    <label>HAVI KÖLTSÉGVETÉS (HUF)</label>
+    <input type="number" id="set-budget" value="200000" placeholder="200000">
+    <div class="note">Havi keretösszeg a pénztárcához</div>
+    <label>NAPI KÖLTÉSI LIMIT (HUF)</label>
+    <input type="number" id="set-daily-limit" value="10000" placeholder="10000">
+    <label>ALVÁS CÉL (ÓRA)</label>
+    <input type="number" id="set-sleep-goal" value="8" min="4" max="12" step="0.5">
+    <label>POMODORO IDŐTARTAM (PERC)</label>
+    <input type="number" id="set-pomo-work" value="25" min="5" max="60">
+    <label>POMODORO SZÜNET (PERC)</label>
+    <input type="number" id="set-pomo-break" value="5" min="1" max="30">
+    <label>NAPI POMODORO CÉL</label>
+    <input type="number" id="set-pomo-goal" value="4" min="1" max="20">
+  </div>
+  <div style="margin-top:20px;border-top:1px solid #0f2a50;padding-top:14px">
     <label>ADATOK</label>
     <button class="btn" onclick="exportData()" style="font-size:12px;padding:8px">📤 Adatok exportálása</button>
     <button class="btn" onclick="if(confirm('Biztos törlöd az összes helyi adatot?')){localStorage.clear();location.reload();}" style="font-size:12px;padding:8px;color:#f87171;border-color:#ef4444;margin-top:6px">🗑 Helyi adatok törlése</button>
   </div>
 </div>
 </div>
+<!-- PWA install banner -->
+<div class="install-banner" id="install-banner">
+  <div style="color:#fff;font-size:14px;font-weight:600;margin-bottom:8px">📱 Telepítsd az appot!</div>
+  <button onclick="installPWA()">Telepítés</button>
+  <button onclick="dismissInstall()" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3)">Később</button>
+</div>
 </div><!-- /app-content -->
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════════
 //  STANDALONE PWA — KÜLSŐ SZERVEREN FUT, LAPTOP NÉLKÜL IS MŰKÖDIK
@@ -321,6 +673,10 @@ const DAILY_EXTRA={
 };
 const SL_RANKS=[[0,"E","#9ca3af","Gyenge Vadász"],[500,"D","#22c55e","Bronz Vadász"],[1500,"C","#3b82f6","Ezüst Vadász"],[3500,"B","#a855f7","Arany Vadász"],[7500,"A","#f59e0b","Nemzeti Szintű Vadász"],[15000,"S","#ef4444","Különleges Osztályú Vadász"],[35000,"MONARCH","#818cf8","Árnyékok Monarchája"]];
 
+const ALL_TABS=['morning','news','stats','finance','goals'];
+const FIN_CATS=[{id:'food',icon:'🍔',name:'Étel'},{id:'transport',icon:'🚌',name:'Közlekedés'},{id:'fun',icon:'🎮',name:'Szórakozás'},{id:'shop',icon:'🛒',name:'Bevásárlás'},{id:'health',icon:'💊',name:'Egészség'},{id:'sub',icon:'📱',name:'Előfizetés'},{id:'learn',icon:'📚',name:'Tanulás'},{id:'other',icon:'❓',name:'Egyéb'}];
+const GOAL_EMOJIS=['💪','📚','💰','🎯','💼','🏃','🧠','❤️','🏠','✈️','🎨','🎵','📖','🌍','⭐'];
+const AVATAR_MAP={E:'🐣',D:'🐺',C:'⚔️',B:'🛡️',A:'👑',S:'💀',MONARCH:'👁️'};
 let currentNews=0, currentTab='morning', laptopAvailable=false;
 
 // ── localStorage SEGÉDFÜGGVÉNYEK ──
@@ -520,15 +876,24 @@ setInterval(tick,1000);tick();
 // ── TAB NAVIGÁCIÓ ──
 function switchTab(name){
   currentTab=name;
-  document.getElementById('tab-morning').style.display=(name==='morning')?'block':'none';
-  document.getElementById('tab-news').style.display=(name==='news')?'block':'none';
-  document.getElementById('mtab-morning').className='main-tab-btn'+(name==='morning'?' active':'');
-  document.getElementById('mtab-news').className='main-tab-btn'+(name==='news'?' active':'');
+  ALL_TABS.forEach(t=>{
+    const el=document.getElementById('tab-'+t);if(el)el.style.display=(t===name)?'block':'none';
+    const btn=document.getElementById('mtab-'+t);if(btn)btn.className='main-tab-btn'+(t===name?' active':'');
+  });
   if(name==='news'){buildNewsTabs();loadNews(currentNews);}
+  if(name==='stats')renderStats();
+  if(name==='finance')loadFinance();
+  if(name==='goals')loadGoals();
+  // Scroll active tab into view
+  const btn=document.getElementById('mtab-'+name);
+  if(btn)btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
 }
 function loadCurrentTab(){
-  if(currentTab==='morning'){loadWeather();loadCal();loadTasks();loadRecurring();loadSolo();}
-  else{loadNews(currentNews);}
+  if(currentTab==='morning'){loadWeather();loadCal();loadTasks();loadRecurring();loadSolo();loadSleep();loadPomoMini();loadMood();}
+  else if(currentTab==='news'){loadNews(currentNews);}
+  else if(currentTab==='stats'){renderStats();}
+  else if(currentTab==='finance'){loadFinance();}
+  else if(currentTab==='goals'){loadGoals();}
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -820,7 +1185,7 @@ async function completeQ(){
   p.total_xp+=ch.xp;p.completed_today=true;
   p.last_completed=todayKey();p.streak=(p.streak||0)+1;
   p.task_checks[todayKey()]=new Array(tasks.length).fill(true);
-  LSset('solo',p);renderSolo();
+  LSset('solo',p);renderSolo();updateAvatar();checkAchievements();
   const base=getLaptopUrl();
   if(laptopAvailable&&base){
     try{await fetch(base+"/api/solo/complete",{method:"POST"});}catch(e){}
@@ -1027,6 +1392,13 @@ function openSettings(){
   document.getElementById('settings-overlay').classList.add('open');
   document.getElementById('set-ip').value=LS('laptop_ip','');
   document.getElementById('set-port').value=LS('laptop_port',5050);
+  // Load saved settings
+  const budgetEl=document.getElementById('set-budget');if(budgetEl)budgetEl.value=LS('fin_budget',200000);
+  const dailyEl=document.getElementById('set-daily-limit');if(dailyEl)dailyEl.value=LS('fin_daily_limit',10000);
+  const sleepEl=document.getElementById('set-sleep-goal');if(sleepEl)sleepEl.value=LS('sleep_goal',8);
+  const pomoWEl=document.getElementById('set-pomo-work');if(pomoWEl)pomoWEl.value=LS('pomo_work',25);
+  const pomoBEl=document.getElementById('set-pomo-break');if(pomoBEl)pomoBEl.value=LS('pomo_break',5);
+  const pomoGEl=document.getElementById('set-pomo-goal');if(pomoGEl)pomoGEl.value=LS('pomo_goal',4);
   updateConnIndicator();
 }
 function closeSettings(){document.getElementById('settings-overlay').classList.remove('open');}
@@ -1035,6 +1407,19 @@ function saveSettings(){
   const ip=document.getElementById('set-ip').value.trim();
   const port=parseInt(document.getElementById('set-port').value)||5050;
   LSset('laptop_ip',ip);LSset('laptop_port',port);
+  // Finance settings
+  const budget=parseInt(document.getElementById('set-budget')?.value)||200000;
+  const dailyLimit=parseInt(document.getElementById('set-daily-limit')?.value)||10000;
+  LSset('fin_budget',budget);LSset('fin_daily_limit',dailyLimit);
+  // Sleep goal
+  const sleepGoal=parseFloat(document.getElementById('set-sleep-goal')?.value)||8;
+  LSset('sleep_goal',sleepGoal);
+  // Pomodoro settings
+  const pomoWork=parseInt(document.getElementById('set-pomo-work')?.value)||25;
+  const pomoBreak=parseInt(document.getElementById('set-pomo-break')?.value)||5;
+  const pomoGoal=parseInt(document.getElementById('set-pomo-goal')?.value)||4;
+  LSset('pomo_work',pomoWork);LSset('pomo_break',pomoBreak);LSset('pomo_goal',pomoGoal);
+  getPomoSettings();
   showBanner('💾 Beállítások mentve!');
   closeSettings();
   syncFromLaptop().then(()=>{loadCurrentTab();});
@@ -1062,6 +1447,9 @@ function updateConnIndicator(){
 
 function exportData(){
   const data={solo:LS('solo',{}),recurring:LS('recurring',{}),tasks:LS('tasks',[]),
+              habits:LS('habits',[]),habit_log:LS('habit_log',{}),mood:LS('mood',{}),
+              sleep:LS('sleep',{}),finance:LS('finance',[]),goals:LS('goals',[]),
+              pomodoro:LS('pomodoro',{}),achievements:LS('achievements',[]),
               laptop_ip:LS('laptop_ip',''),laptop_port:LS('laptop_port',5050)};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
@@ -1091,7 +1479,11 @@ async function refreshAll(){
     await syncFromLaptop();
     await loadWeather();
     loadCal();loadTasks();loadRecurring();loadSolo();
+    loadSleep();loadMood();loadPomoMini();updateAvatar();
     if(currentTab==='news')await loadNews(currentNews);
+    if(currentTab==='stats')renderStats();
+    if(currentTab==='finance')loadFinance();
+    if(currentTab==='goals')loadGoals();
     showBanner('✅ Frissítve!');
   }catch(e){
     showBanner('⚠ Hiba a frissítésnél');
@@ -1131,17 +1523,880 @@ if('serviceWorker' in navigator){
 }
 
 // ═══════════════════════════════════════════════════════════════════
+//  HANGULAT & ENERGIA TRACKER
+// ═══════════════════════════════════════════════════════════════════
+const MOODS=['😢','😕','😐','🙂','😄'];
+
+function loadMood(){
+  const el=document.getElementById('mood-content');
+  if(!el)return;
+  const tk=todayKey();
+  const moodData=LS('mood',{});
+  const today=moodData[tk];
+
+  if(today&&today.mood!==undefined){
+    // Already logged - show summary
+    const energyBars='🟦'.repeat(today.energy)+'⬜'.repeat(5-today.energy);
+    let h='<div style="display:flex;align-items:center;gap:14px;padding:6px 0">';
+    h+='<div style="font-size:32px">'+MOODS[today.mood]+'</div>';
+    h+='<div><div style="color:#e0f2fe;font-size:13px">Energia: '+energyBars+'</div>';
+    if(today.note)h+='<div style="color:#64748b;font-size:11px;margin-top:2px;font-style:italic">"'+today.note+'"</div>';
+    h+='</div></div>';
+    h+='<div style="color:#334155;font-size:10px;cursor:pointer;text-align:right" onclick="resetMood()">Módosítás</div>';
+    el.innerHTML=h;
+  } else {
+    // Show input
+    let h='<div style="text-align:center;padding:8px 0">';
+    h+='<div style="color:#64748b;font-size:12px;margin-bottom:8px">Hogy érzed magad ma?</div>';
+    h+='<div style="display:flex;justify-content:center;gap:12px;margin-bottom:12px">';
+    MOODS.forEach((m,i)=>{
+      h+='<button onclick="setMood('+i+')" style="font-size:28px;background:transparent;border:2px solid transparent;border-radius:10px;padding:6px;cursor:pointer" id="mood-btn-'+i+'">'+m+'</button>';
+    });
+    h+='</div>';
+    h+='<div style="color:#64748b;font-size:12px;margin-bottom:6px">Energia szint</div>';
+    h+='<div style="display:flex;justify-content:center;gap:8px;margin-bottom:10px">';
+    for(let i=1;i<=5;i++){
+      h+='<button onclick="setEnergy('+i+')" style="background:#0a1f3d;color:#2563eb;border:1px solid #0f2a50;border-radius:6px;width:36px;height:36px;font-size:14px;font-weight:700;cursor:pointer" id="energy-btn-'+i+'">'+i+'</button>';
+    }
+    h+='</div>';
+    h+='<input type="text" id="mood-note" placeholder="Rövid megjegyzés (opcionális)" style="width:100%;background:#020a14;color:#e0f2fe;border:1px solid #0f2a50;border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:8px">';
+    h+='<button onclick="saveMood()" class="btn" style="margin-top:0;padding:10px;font-size:12px">💾 Mentés</button>';
+    h+='</div>';
+    el.innerHTML=h;
+  }
+}
+
+let tempMood=-1,tempEnergy=0;
+
+function setMood(idx){
+  tempMood=idx;
+  MOODS.forEach((m,i)=>{
+    const btn=document.getElementById('mood-btn-'+i);
+    if(btn)btn.style.borderColor=i===idx?'#2563eb':'transparent';
+  });
+}
+
+function setEnergy(lvl){
+  tempEnergy=lvl;
+  for(let i=1;i<=5;i++){
+    const btn=document.getElementById('energy-btn-'+i);
+    if(btn){btn.style.background=i<=lvl?'#1d4ed8':'#0a1f3d';btn.style.color=i<=lvl?'#e0f2fe':'#2563eb';}
+  }
+}
+
+function saveMood(){
+  if(tempMood<0){showBanner('⚠ Válassz hangulatot!');return;}
+  if(tempEnergy<1){showBanner('⚠ Válassz energia szintet!');return;}
+  const tk=todayKey();
+  const moodData=LS('mood',{});
+  const note=document.getElementById('mood-note')?.value?.trim()||'';
+  moodData[tk]={mood:tempMood,energy:tempEnergy,note:note,ts:Date.now()};
+  LSset('mood',moodData);
+  tempMood=-1;tempEnergy=0;
+  loadMood();
+  showBanner('✅ Hangulat mentve!');
+}
+
+function resetMood(){
+  const tk=todayKey();
+  const moodData=LS('mood',{});
+  delete moodData[tk];
+  LSset('mood',moodData);
+  tempMood=-1;tempEnergy=0;
+  loadMood();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  ACHIEVEMENT RENDSZER
+// ═══════════════════════════════════════════════════════════════════
+const ACHIEVEMENTS=[
+  {id:'first_day',name:'Első Szikra',icon:'🔥',desc:'Első nap teljesítve',check:p=>p.total_xp>0},
+  {id:'streak_7',name:'Tűzcsóva',icon:'🔥',desc:'7 napos streak',check:p=>p.streak>=7},
+  {id:'streak_30',name:'Megállíthatatlan',icon:'🔥',desc:'30 napos streak',check:p=>p.streak>=30},
+  {id:'streak_100',name:'Legenda',icon:'🔥',desc:'100 napos streak',check:p=>p.streak>=100},
+  {id:'first_quest',name:'Első Vér',icon:'⚔️',desc:'Első küldetés teljesítve',check:p=>p.last_completed!==null},
+  {id:'rank_d',name:'D Rang',icon:'🏆',desc:'D rang elérése (500 XP)',check:p=>p.total_xp>=500},
+  {id:'rank_c',name:'C Rang',icon:'🏆',desc:'C rang elérése (1500 XP)',check:p=>p.total_xp>=1500},
+  {id:'rank_b',name:'B Rang',icon:'🏆',desc:'B rang elérése (3500 XP)',check:p=>p.total_xp>=3500},
+  {id:'rank_a',name:'A Rang',icon:'🏆',desc:'A rang elérése (7500 XP)',check:p=>p.total_xp>=7500},
+  {id:'rank_s',name:'S Rang',icon:'🏆',desc:'S rang elérése (15000 XP)',check:p=>p.total_xp>=15000},
+  {id:'rank_monarch',name:'Monarcha',icon:'👑',desc:'MONARCH rang (35000 XP)',check:p=>p.total_xp>=35000},
+  {id:'xp_1000',name:'Ezres Klub',icon:'⭐',desc:'1000 XP összegyűjtve',check:p=>p.total_xp>=1000},
+  {id:'xp_10000',name:'Tízezres Klub',icon:'💎',desc:'10000 XP összegyűjtve',check:p=>p.total_xp>=10000},
+  {id:'habit_30_med',name:'Fegyelmezett',icon:'💊',desc:'30 nap gyógyszer streak',check:()=>{const l=LS('habit_log',{});let s=0;const d=new Date();for(let i=0;i<30;i++){const k=new Date(d-i*864e5).toISOString().slice(0,10);if(l[k]?.h1)s++;else break;}return s>=30;}},
+  {id:'habit_30_mom',name:'Jó Fiú',icon:'📞',desc:'30 nap anya hívás streak',check:()=>{const l=LS('habit_log',{});let s=0;const d=new Date();for(let i=0;i<30;i++){const k=new Date(d-i*864e5).toISOString().slice(0,10);if(l[k]?.h2)s++;else break;}return s>=30;}},
+  {id:'pomo_50',name:'Tudós',icon:'🧠',desc:'50 pomodoro teljesítve',check:()=>{const d=LS('pomodoro',{});let t=0;Object.values(d).forEach(v=>t+=(v.count||0));return t>=50;}},
+  {id:'boss_10',name:'Boss Slayer',icon:'💪',desc:'10 Boss Fight teljesítve',check:()=>{const d=LS('boss_fight',{});return Object.values(d).filter(v=>v===true).length>=10;}},
+  {id:'sleep_7',name:'Alvó Herceg',icon:'😴',desc:'7 nap 8+ óra alvás',check:()=>{const d=LS('sleep',{});let s=0;const dt=new Date();for(let i=0;i<7;i++){const k=new Date(dt-i*864e5).toISOString().slice(0,10);if(d[k]?.duration>=8)s++;else break;}return s>=7;}},
+  {id:'goal_done',name:'Célratörő',icon:'🎯',desc:'Első cél teljesítve',check:()=>LS('goals',[]).some(g=>g.done)}
+];
+
+function checkAchievements(){
+  const p=loadSoloLocal();
+  const unlocked=LS('achievements',[]);
+  let newOnes=[];
+  ACHIEVEMENTS.forEach(a=>{
+    if(!unlocked.includes(a.id)&&a.check(p)){
+      unlocked.push(a.id);
+      newOnes.push(a);
+    }
+  });
+  if(newOnes.length>0){
+    LSset('achievements',unlocked);
+    newOnes.forEach(a=>showAchievementPopup(a));
+  }
+}
+
+function showAchievementPopup(a){
+  const d=document.createElement('div');
+  d.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#0a1a3a,#020a14);border:2px solid #f59e0b;border-radius:16px;padding:30px;z-index:99999;text-align:center;min-width:280px;box-shadow:0 0 60px rgba(245,158,11,0.3);animation:fadeIn .5s';
+  d.innerHTML='<div style="font-size:60px;margin-bottom:10px">'+a.icon+'</div><div style="color:#f59e0b;font-size:12px;font-weight:700;letter-spacing:2px;margin-bottom:6px">ÚJ ACHIEVEMENT!</div><div style="color:#e0f2fe;font-size:20px;font-weight:800;margin-bottom:6px">'+a.name+'</div><div style="color:#64748b;font-size:13px;margin-bottom:16px">'+a.desc+'</div><button onclick="this.parentElement.remove()" style="background:#f59e0b;color:#020a14;border:none;border-radius:8px;padding:10px 30px;font-size:14px;font-weight:700;cursor:pointer">Szuper!</button>';
+  document.body.appendChild(d);
+  if(navigator.vibrate)navigator.vibrate([100,50,100,50,200]);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  ALVÁS TRACKER (Task 9)
+// ═══════════════════════════════════════════════════════════════════
+function getSleepData(){return LS('sleep',{});}
+function getSleepGoal(){return LS('sleep_goal',8);}
+
+function loadSleep(){
+  const el=document.getElementById('sleep-content');
+  if(!el)return;
+  const tk=todayKey();
+  const data=getSleepData();
+  const today=data[tk];
+
+  if(today&&today.wakeup){
+    // Already logged - show summary
+    const dur=today.duration||0;
+    const goal=getSleepGoal();
+    const quality='⭐'.repeat(today.quality||0)+'☆'.repeat(5-(today.quality||0));
+    let color='#22c55e';
+    if(dur<6)color='#ef4444';
+    else if(dur<7)color='#f59e0b';
+    let h='<div class="sleep-summary">';
+    h+='<div style="font-size:36px">😴</div>';
+    h+='<div><div style="color:'+color+';font-size:20px;font-weight:800">'+dur.toFixed(1)+' óra</div>';
+    h+='<div style="font-size:12px;color:#64748b">'+quality+'</div>';
+    if(today.bedtime)h+='<div style="font-size:10px;color:#334155">🛌 '+today.bedtime+' → ⏰ '+today.wakeup+'</div>';
+    h+='</div></div>';
+    if(dur<6)h+='<div style="color:#ef4444;font-size:11px;margin-top:4px">⚠ Keveset aludtál! Próbálj ma korábban lefeküdni.</div>';
+    h+='<div style="color:#334155;font-size:10px;cursor:pointer;text-align:right" onclick="resetSleep()">Módosítás</div>';
+    el.innerHTML=h;
+  } else {
+    // Input mode
+    const bedtime=today?.bedtime||'';
+    let h='<div style="padding:4px 0">';
+    if(!bedtime){
+      h+='<div class="sleep-row"><button class="sleep-btn" onclick="setSleepBedtime()">🛌 Lefekvés most</button>';
+      h+='<input type="time" id="sleep-bed-time" value="23:00" style="background:#020a14;color:#e0f2fe;border:1px solid #0f2a50;border-radius:8px;padding:8px;font-size:13px;width:100px">';
+      h+='<button class="sleep-btn" style="flex:0" onclick="setSleepBedtimeManual()">OK</button></div>';
+    } else {
+      h+='<div style="color:#64748b;font-size:12px;margin-bottom:8px">🛌 Lefekvés: '+bedtime+'</div>';
+      h+='<div class="sleep-row"><button class="sleep-btn" onclick="setSleepWakeup()">⏰ Felkelés most</button>';
+      h+='<input type="time" id="sleep-wake-time" value="07:00" style="background:#020a14;color:#e0f2fe;border:1px solid #0f2a50;border-radius:8px;padding:8px;font-size:13px;width:100px">';
+      h+='<button class="sleep-btn" style="flex:0" onclick="setSleepWakeupManual()">OK</button></div>';
+      h+='<div style="color:#64748b;font-size:12px;margin:8px 0">Alvás minőség:</div>';
+      h+='<div class="sleep-stars" id="sleep-stars">';
+      for(let i=1;i<=5;i++)h+='<span class="sleep-star" onclick="setSleepQuality('+i+')">⭐</span>';
+      h+='</div>';
+    }
+    h+='</div>';
+    el.innerHTML=h;
+  }
+}
+
+let sleepQuality=0;
+function setSleepQuality(q){
+  sleepQuality=q;
+  document.querySelectorAll('.sleep-star').forEach((s,i)=>s.classList.toggle('active',i<q));
+}
+
+function setSleepBedtime(){
+  const tk=todayKey();const data=getSleepData();
+  const now=new Date();const time=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  if(!data[tk])data[tk]={};
+  data[tk].bedtime=time;
+  LSset('sleep',data);loadSleep();
+}
+function setSleepBedtimeManual(){
+  const time=document.getElementById('sleep-bed-time')?.value;if(!time)return;
+  const tk=todayKey();const data=getSleepData();
+  if(!data[tk])data[tk]={};data[tk].bedtime=time;
+  LSset('sleep',data);loadSleep();
+}
+
+function setSleepWakeup(){
+  const now=new Date();const time=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  finalizeSleep(time);
+}
+function setSleepWakeupManual(){
+  const time=document.getElementById('sleep-wake-time')?.value;if(!time)return;
+  finalizeSleep(time);
+}
+
+function finalizeSleep(wakeTime){
+  const tk=todayKey();const data=getSleepData();
+  if(!data[tk]||!data[tk].bedtime){showBanner('⚠ Előbb add meg a lefekvés idejét!');return;}
+  data[tk].wakeup=wakeTime;
+  data[tk].quality=sleepQuality||3;
+  // Calculate duration
+  const[bh,bm]=data[tk].bedtime.split(':').map(Number);
+  const[wh,wm]=wakeTime.split(':').map(Number);
+  let dur=(wh*60+wm)-(bh*60+bm);
+  if(dur<0)dur+=1440; // overnight
+  data[tk].duration=Math.round(dur/6)/10; // hours with 1 decimal
+  LSset('sleep',data);
+  sleepQuality=0;
+  // XP bonus for good sleep
+  const p=loadSoloLocal();
+  if(data[tk].duration>=8){p.total_xp+=30;showBanner('😴 +30 XP: 8+ óra alvás!');}
+  else if(data[tk].duration>=7){p.total_xp+=20;showBanner('😴 +20 XP: 7+ óra alvás!');}
+  LSset('solo',p);
+  loadSleep();checkAchievements();
+}
+
+function resetSleep(){
+  const tk=todayKey();const data=getSleepData();
+  delete data[tk];LSset('sleep',data);sleepQuality=0;loadSleep();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  POMODORO TIMER (Task 11)
+// ═══════════════════════════════════════════════════════════════════
+let pomoInterval=null,pomoRunning=false,pomoSeconds=0,pomoPhase='work';
+let pomoWorkDuration=25*60,pomoBreakDuration=5*60,pomoLongBreak=15*60;
+let pomoSessionCount=0,pomoDailyGoal=4;
+
+function getPomoSettings(){
+  pomoWorkDuration=(LS('pomo_work',25))*60;
+  pomoBreakDuration=(LS('pomo_break',5))*60;
+  pomoDailyGoal=LS('pomo_goal',4);
+}
+
+function getPomoData(){
+  const tk=todayKey();
+  const d=LS('pomodoro',{});
+  if(!d[tk])d[tk]={count:0,total_minutes:0};
+  return d;
+}
+
+function loadPomoMini(){
+  const el=document.getElementById('pomo-mini-content');
+  if(!el)return;
+  getPomoSettings();
+  const data=getPomoData();const tk=todayKey();
+  const today=data[tk]||{count:0};
+  const mins=Math.floor(pomoSeconds/60);const secs=pomoSeconds%60;
+  const timeStr=String(mins).padStart(2,'0')+':'+String(secs).padStart(2,'0');
+  const total=pomoPhase==='work'?pomoWorkDuration:pomoBreakDuration;
+  const pct=total>0?Math.round((1-pomoSeconds/total)*100):0;
+
+  let h='<div class="pomo-mini">';
+  h+='<div><div class="pomo-time">'+timeStr+'</div>';
+  h+='<div style="color:#334155;font-size:10px">'+(pomoPhase==='work'?'🔴 Munka':'🟢 Szünet')+'</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:20px">🍅</div>';
+  h+='<div style="color:#64748b;font-size:11px">'+today.count+'/'+pomoDailyGoal+'</div></div>';
+  h+='<div class="pomo-btns">';
+  h+='<button class="pomo-btn" onclick="togglePomo()">'+(pomoRunning?'⏸':'▶')+'</button>';
+  h+='<button class="pomo-btn" onclick="openPomo()">⛶</button>';
+  h+='</div></div>';
+  el.innerHTML=h;
+}
+
+function openPomo(){document.getElementById('pomo-full').classList.add('open');updatePomoFull();}
+function closePomo(){document.getElementById('pomo-full').classList.remove('open');}
+
+function togglePomo(){
+  if(pomoRunning){
+    clearInterval(pomoInterval);pomoRunning=false;
+  } else {
+    if(pomoSeconds<=0){
+      pomoSeconds=pomoPhase==='work'?pomoWorkDuration:pomoBreakDuration;
+    }
+    pomoRunning=true;
+    pomoInterval=setInterval(()=>{
+      if(pomoSeconds>0){pomoSeconds--;updatePomoFull();loadPomoMini();}
+      else{pomoTimerDone();}
+    },1000);
+  }
+  const btn=document.getElementById('pomo-play-btn');
+  if(btn)btn.textContent=pomoRunning?'⏸':'▶';
+  loadPomoMini();
+}
+
+function resetPomo(){
+  clearInterval(pomoInterval);pomoRunning=false;pomoPhase='work';
+  getPomoSettings();pomoSeconds=pomoWorkDuration;
+  updatePomoFull();loadPomoMini();
+}
+
+function pomoTimerDone(){
+  clearInterval(pomoInterval);pomoRunning=false;
+  // Sound beep
+  try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator();
+    o.type='sine';o.frequency.value=880;o.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.3);}catch(e){}
+  if(navigator.vibrate)navigator.vibrate([200,100,200,100,200]);
+
+  if(pomoPhase==='work'){
+    // Complete a pomodoro
+    const data=getPomoData();const tk=todayKey();
+    if(!data[tk])data[tk]={count:0,total_minutes:0};
+    data[tk].count++;
+    data[tk].total_minutes+=Math.round(pomoWorkDuration/60);
+    LSset('pomodoro',data);
+    // XP bonus
+    const p=loadSoloLocal();
+    p.total_xp+=50;LSset('solo',p);
+    showBanner('🍅 Pomodoro kész! +50 XP');
+    phoneNotify('🍅 Pomodoro kész!','+50 XP — Ideje szünetet tartani!');
+    pomoSessionCount++;
+    // Switch to break
+    pomoPhase=(pomoSessionCount%4===0)?'long_break':'break';
+    pomoSeconds=pomoPhase==='long_break'?pomoLongBreak:pomoBreakDuration;
+    checkAchievements();
+  } else {
+    phoneNotify('☕ Szünet vége!','Ideje újra dolgozni!');
+    pomoPhase='work';pomoSeconds=pomoWorkDuration;
+  }
+  updatePomoFull();loadPomoMini();
+}
+
+function updatePomoFull(){
+  const label=document.getElementById('pomo-phase-label');
+  const time=document.getElementById('pomo-big-time');
+  const ring=document.getElementById('pomo-big-ring');
+  const info=document.getElementById('pomo-session-info');
+  if(!label)return;
+  label.textContent=pomoPhase==='work'?'MUNKA':pomoPhase==='long_break'?'HOSSZÚ SZÜNET':'SZÜNET';
+  const mins=Math.floor(pomoSeconds/60);const secs=pomoSeconds%60;
+  time.textContent=String(mins).padStart(2,'0')+':'+String(secs).padStart(2,'0');
+  const total=pomoPhase==='work'?pomoWorkDuration:(pomoPhase==='long_break'?pomoLongBreak:pomoBreakDuration);
+  const pct=total>0?pomoSeconds/total:0;
+  const circumference=2*Math.PI*90;
+  ring.setAttribute('stroke-dashoffset',circumference*(1-pct));
+  ring.setAttribute('stroke',pomoPhase==='work'?'#ef4444':'#22c55e');
+  const data=getPomoData();const tk=todayKey();
+  info.textContent='Ma: '+(data[tk]?.count||0)+'/'+pomoDailyGoal+' 🍅';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  PÉNZÜGYI TRACKER (Task 10)
+// ═══════════════════════════════════════════════════════════════════
+let selectedFinCat='food';
+
+function getFinData(){return LS('finance',[]);}
+function getFinSettings(){return{budget:LS('fin_budget',200000),daily_limit:LS('fin_daily_limit',10000)};}
+
+function loadFinance(){
+  renderFinSummary();renderFinBudget();renderFinList();
+}
+
+function renderFinSummary(){
+  const el=document.getElementById('fin-summary');if(!el)return;
+  const items=getFinData();const tk=todayKey();
+  const now=new Date();
+  const todayTotal=items.filter(i=>i.date===tk).reduce((s,i)=>s+i.amount,0);
+  const weekStart=new Date(now);weekStart.setDate(now.getDate()-now.getDay()+1);
+  const wk=weekStart.toISOString().slice(0,10);
+  const weekTotal=items.filter(i=>i.date>=wk).reduce((s,i)=>s+i.amount,0);
+  const monthKey=tk.slice(0,7);
+  const monthTotal=items.filter(i=>i.date.startsWith(monthKey)).reduce((s,i)=>s+i.amount,0);
+  const settings=getFinSettings();
+  const dailyColor=todayTotal>settings.daily_limit?'#ef4444':'#e0f2fe';
+  el.innerHTML='<div class="fin-box"><div class="fin-amount" style="color:'+dailyColor+'">'+todayTotal.toLocaleString()+' Ft</div><div class="fin-label">MA</div></div>'+
+    '<div class="fin-box"><div class="fin-amount">'+weekTotal.toLocaleString()+' Ft</div><div class="fin-label">E HÉT</div></div>'+
+    '<div class="fin-box"><div class="fin-amount">'+monthTotal.toLocaleString()+' Ft</div><div class="fin-label">E HÓNAP</div></div>'+
+    '<div class="fin-box"><div class="fin-amount" style="color:#22c55e">'+(settings.budget-monthTotal).toLocaleString()+' Ft</div><div class="fin-label">MARADÉK</div></div>';
+}
+
+function renderFinBudget(){
+  const el=document.getElementById('fin-budget');if(!el)return;
+  const items=getFinData();const tk=todayKey();const monthKey=tk.slice(0,7);
+  const monthTotal=items.filter(i=>i.date.startsWith(monthKey)).reduce((s,i)=>s+i.amount,0);
+  const settings=getFinSettings();
+  const pct=Math.min(100,Math.round(monthTotal/settings.budget*100));
+  const color=pct>90?'#ef4444':pct>70?'#f59e0b':'#22c55e';
+  // Forecast
+  const dayOfMonth=new Date().getDate();
+  const daysInMonth=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
+  const forecast=dayOfMonth>0?Math.round(monthTotal/dayOfMonth*daysInMonth):0;
+  el.innerHTML='<div style="font-size:10px;color:#334155;margin-bottom:4px">HAVI BUDGET: '+settings.budget.toLocaleString()+' Ft ('+pct+'%)</div>'+
+    '<div class="fin-budget-bar"><div class="fin-budget-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'+
+    '<div style="font-size:10px;color:#64748b">Előrejelzés hó végéig: <span style="color:'+(forecast>settings.budget?'#ef4444':'#22c55e')+'">'+forecast.toLocaleString()+' Ft</span></div>';
+}
+
+function renderFinList(){
+  const el=document.getElementById('fin-list');if(!el)return;
+  const items=getFinData().sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,30);
+  if(items.length===0){el.innerHTML='<div style="color:#334155;font-size:12px;padding:10px 0">Nincs kiadás</div>';return;}
+  let h='';let lastDate='';
+  items.forEach(i=>{
+    if(i.date!==lastDate){h+='<div style="color:#2563eb;font-size:10px;font-weight:700;margin-top:8px">'+i.date+'</div>';lastDate=i.date;}
+    const cat=FIN_CATS.find(c=>c.id===i.category)||FIN_CATS[7];
+    h+='<div class="fin-item"><div><span class="fin-item-cat">'+cat.icon+'</span>'+
+      (i.note||cat.name)+'</div><div style="color:#ef4444;font-weight:700">-'+i.amount.toLocaleString()+' Ft</div></div>';
+  });
+  el.innerHTML=h;
+}
+
+function openFinAdd(){
+  document.getElementById('fin-add-overlay').classList.add('open');
+  document.getElementById('fin-amount').value='';
+  document.getElementById('fin-note').value='';
+  document.getElementById('fin-date').value=todayKey();
+  selectedFinCat='food';
+  const picker=document.getElementById('fin-cat-picker');
+  picker.innerHTML='';
+  FIN_CATS.forEach(c=>{
+    picker.innerHTML+='<div class="fin-cat-btn'+(c.id===selectedFinCat?' selected':'')+'" onclick="selectFinCat(\''+c.id+'\')">'+c.icon+'<br>'+c.name+'</div>';
+  });
+}
+function closeFinAdd(){document.getElementById('fin-add-overlay').classList.remove('open');}
+
+function selectFinCat(id){
+  selectedFinCat=id;
+  document.querySelectorAll('.fin-cat-btn').forEach(b=>b.classList.remove('selected'));
+  const btns=document.querySelectorAll('.fin-cat-btn');
+  FIN_CATS.forEach((c,i)=>{if(c.id===id&&btns[i])btns[i].classList.add('selected');});
+}
+
+function saveExpense(){
+  const amount=parseInt(document.getElementById('fin-amount').value);
+  if(!amount||amount<=0){showBanner('⚠ Adj meg egy összeget!');return;}
+  const note=document.getElementById('fin-note').value.trim();
+  const date=document.getElementById('fin-date').value||todayKey();
+  const items=getFinData();
+  items.push({id:Date.now(),date,amount,category:selectedFinCat,note});
+  LSset('finance',items);
+  closeFinAdd();loadFinance();showBanner('💰 Kiadás mentve!');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  CÉLOK RENDSZER (Task 12)
+// ═══════════════════════════════════════════════════════════════════
+let editingGoalId=null;
+
+function getGoals(){return LS('goals',[]);}
+
+function loadGoals(){
+  const el=document.getElementById('goals-list');if(!el)return;
+  const goals=getGoals();
+  if(goals.length===0){el.innerHTML='<div style="color:#334155;font-size:12px;padding:10px 0">Nincs cél beállítva. Adj hozzá egyet!</div>';return;}
+  let h='';
+  goals.forEach(g=>{
+    const pct=g.target_value>0?Math.min(100,Math.round((g.current_value||0)/g.target_value*100)):(g.done?100:0);
+    const deadline=g.deadline?new Date(g.deadline):null;
+    const daysLeft=deadline?Math.ceil((deadline-new Date())/(1000*60*60*24)):null;
+    h+='<div class="goal-item" onclick="openGoalEdit(\''+g.id+'\')">';
+    h+='<div class="goal-hdr"><div class="goal-icon">'+g.icon+'</div><div style="flex:1">';
+    h+='<div class="goal-name">'+g.name+'</div>';
+    if(daysLeft!==null)h+='<div class="goal-deadline">'+(daysLeft>0?daysLeft+' nap hátra':'⏰ Lejárt!')+'</div>';
+    h+='</div><div class="goal-pct">'+pct+'%</div></div>';
+    h+='<div class="goal-progress"><div class="goal-progress-fill" style="width:'+pct+'%"></div></div>';
+    if(g.target_value>0){h+='<div style="color:#64748b;font-size:11px">'+(g.current_value||0)+' / '+g.target_value+'</div>';}
+    // Milestones
+    if(g.milestones&&g.milestones.length){
+      h+='<div style="margin-top:6px">';
+      g.milestones.forEach((m,mi)=>{
+        h+='<div style="font-size:11px;color:'+(m.done?'#22c55e':'#64748b')+';padding:2px 0;cursor:pointer" onclick="event.stopPropagation();toggleMilestone(\''+g.id+'\','+mi+')">';
+        h+=(m.done?'✅':'⬜')+' '+m.name+'</div>';
+      });
+      h+='</div>';
+    }
+    h+='</div>';
+  });
+  el.innerHTML=h;
+}
+
+function openGoalEdit(id){
+  editingGoalId=id||null;
+  const overlay=document.getElementById('goal-edit-overlay');
+  overlay.classList.add('open');
+  document.getElementById('goal-edit-title').textContent=id?'Cél szerkesztése':'Új cél';
+  document.getElementById('goal-del-btn').style.display=id?'block':'none';
+  const picker=document.getElementById('goal-emoji-picker');
+  picker.innerHTML='';
+  let selIcon=GOAL_EMOJIS[0];
+  if(id){
+    const g=getGoals().find(g=>g.id===id);
+    if(g){
+      document.getElementById('goal-name').value=g.name;
+      document.getElementById('goal-desc').value=g.desc||'';
+      document.getElementById('goal-category').value=g.category||'personal';
+      document.getElementById('goal-deadline').value=g.deadline||'';
+      document.getElementById('goal-target').value=g.target_value||0;
+      selIcon=g.icon;
+    }
+  } else {
+    document.getElementById('goal-name').value='';
+    document.getElementById('goal-desc').value='';
+    document.getElementById('goal-category').value='personal';
+    document.getElementById('goal-deadline').value='';
+    document.getElementById('goal-target').value=0;
+  }
+  GOAL_EMOJIS.forEach(e=>{
+    const btn=document.createElement('button');
+    btn.className='emoji-opt'+(e===selIcon?' selected':'');
+    btn.textContent=e;btn.type='button';
+    btn.onclick=()=>{picker.querySelectorAll('.emoji-opt').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');};
+    picker.appendChild(btn);
+  });
+}
+function closeGoalEdit(){document.getElementById('goal-edit-overlay').classList.remove('open');}
+
+function saveGoal(){
+  const name=document.getElementById('goal-name').value.trim();
+  if(!name){showBanner('⚠ Adj nevet a célnak!');return;}
+  const icon=document.querySelector('#goal-emoji-picker .emoji-opt.selected')?.textContent||'🎯';
+  const desc=document.getElementById('goal-desc').value.trim();
+  const category=document.getElementById('goal-category').value;
+  const deadline=document.getElementById('goal-deadline').value;
+  const target_value=parseInt(document.getElementById('goal-target').value)||0;
+  const goals=getGoals();
+  if(editingGoalId){
+    const idx=goals.findIndex(g=>g.id===editingGoalId);
+    if(idx>=0){goals[idx]={...goals[idx],name,icon,desc,category,deadline,target_value};}
+  } else {
+    goals.push({id:'g'+Date.now(),name,icon,desc,category,deadline,target_value,current_value:0,milestones:[],created_at:todayKey(),done:false});
+  }
+  LSset('goals',goals);closeGoalEdit();loadGoals();showBanner('✅ Cél mentve!');
+}
+
+function deleteGoal(){
+  if(!editingGoalId||!confirm('Biztosan törlöd?'))return;
+  const goals=getGoals().filter(g=>g.id!==editingGoalId);
+  LSset('goals',goals);closeGoalEdit();loadGoals();showBanner('🗑 Cél törölve');
+}
+
+function toggleMilestone(goalId,idx){
+  const goals=getGoals();
+  const g=goals.find(g=>g.id===goalId);
+  if(!g||!g.milestones[idx])return;
+  g.milestones[idx].done=!g.milestones[idx].done;
+  if(g.milestones[idx].done){
+    const p=loadSoloLocal();p.total_xp+=100;LSset('solo',p);
+    showBanner('🏁 Mérföldkő elérve! +100 XP');
+  }
+  // Check if goal is complete
+  if(g.target_value>0&&g.current_value>=g.target_value&&!g.done){
+    g.done=true;const p=loadSoloLocal();p.total_xp+=500;LSset('solo',p);
+    showBanner('🎉 Cél teljesítve! +500 XP');
+  }
+  LSset('goals',goals);loadGoals();checkAchievements();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  STATISZTIKÁK (Task 17) — Chart.js
+// ═══════════════════════════════════════════════════════════════════
+let statsPeriod=7;
+let chartInstances={};
+
+function setStatsPeriod(days){
+  statsPeriod=days;
+  document.querySelectorAll('.stats-filter button').forEach((b,i)=>{
+    b.classList.toggle('active',[7,30,90][i]===days);
+  });
+  renderStats();
+}
+
+function renderStats(){
+  renderStatsSummary();
+  if(typeof Chart!=='undefined'){
+    renderXPChart();renderHabitChart();renderMoodChart();renderSleepChart();renderFinanceChart();
+  }
+}
+
+function renderStatsSummary(){
+  const el=document.getElementById('stats-summary');if(!el)return;
+  const p=loadSoloLocal();
+  const[lvl]=slLevel(p.total_xp);const[rank,rcol]=slRank(p.total_xp);
+  const habits=getHabits();const log=getHabitLog();
+  let totalHabitDays=0,doneHabitDays=0;
+  const d=new Date();
+  for(let i=0;i<statsPeriod;i++){
+    const key=new Date(d.getTime()-i*86400000).toISOString().slice(0,10);
+    const dl=log[key]||{};
+    const doneCount=Object.values(dl).filter(Boolean).length;
+    if(habits.length){totalHabitDays+=habits.length;doneHabitDays+=doneCount;}
+  }
+  const habitPct=totalHabitDays>0?Math.round(doneHabitDays/totalHabitDays*100):0;
+  el.innerHTML='<div class="stat-card"><div class="stat-val" style="color:'+rcol+'">'+rank+'</div><div class="stat-lbl">RANG</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+p.total_xp.toLocaleString()+'</div><div class="stat-lbl">ÖSSZES XP</div></div>'+
+    '<div class="stat-card"><div class="stat-val">🔥 '+p.streak+'</div><div class="stat-lbl">STREAK</div></div>'+
+    '<div class="stat-card"><div class="stat-val">'+habitPct+'%</div><div class="stat-lbl">SZOKÁSOK</div></div>';
+}
+
+function getDatesArray(days){
+  const arr=[];const d=new Date();
+  for(let i=days-1;i>=0;i--){
+    arr.push(new Date(d.getTime()-i*86400000).toISOString().slice(0,10));
+  }
+  return arr;
+}
+
+function destroyChart(key){if(chartInstances[key]){chartInstances[key].destroy();delete chartInstances[key];}}
+
+const CHART_COLORS={bg:'rgba(37,99,235,0.15)',border:'#2563eb',bg2:'rgba(124,58,237,0.15)',border2:'#7c3aed',
+  grid:'rgba(15,42,80,0.5)',text:'#64748b',green:'#22c55e',red:'#ef4444',yellow:'#f59e0b'};
+
+function chartDefaults(){
+  return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{ticks:{color:CHART_COLORS.text,font:{size:9},maxRotation:0},grid:{color:CHART_COLORS.grid}},
+      y:{ticks:{color:CHART_COLORS.text,font:{size:9}},grid:{color:CHART_COLORS.grid}}}};
+}
+
+function renderXPChart(){
+  const dates=getDatesArray(statsPeriod);
+  // We don't have daily XP history, so simulate from solo data
+  // Show cumulative XP approximation
+  const p=loadSoloLocal();
+  const data=dates.map((_,i)=>Math.round(p.total_xp*((i+1)/dates.length)));
+  destroyChart('xp');
+  const ctx=document.getElementById('chart-xp');if(!ctx)return;
+  chartInstances.xp=new Chart(ctx,{type:'line',data:{labels:dates.map(d=>d.slice(5)),
+    datasets:[{data,borderColor:CHART_COLORS.border,backgroundColor:CHART_COLORS.bg,fill:true,tension:.3,pointRadius:0}]},
+    options:{...chartDefaults(),scales:{...chartDefaults().scales,y:{...chartDefaults().scales.y,beginAtZero:true}}}});
+}
+
+function renderHabitChart(){
+  const dates=getDatesArray(statsPeriod);
+  const habits=getHabits();const log=getHabitLog();
+  const data=dates.map(d=>{
+    const dl=log[d]||{};
+    const done=Object.values(dl).filter(Boolean).length;
+    return habits.length>0?Math.round(done/habits.length*100):0;
+  });
+  destroyChart('habits');
+  const ctx=document.getElementById('chart-habits');if(!ctx)return;
+  chartInstances.habits=new Chart(ctx,{type:'bar',data:{labels:dates.map(d=>d.slice(5)),
+    datasets:[{data,backgroundColor:data.map(v=>v>=75?CHART_COLORS.green:v>=50?CHART_COLORS.yellow:CHART_COLORS.red+'80'),
+      borderRadius:4}]},options:{...chartDefaults(),scales:{...chartDefaults().scales,y:{...chartDefaults().scales.y,max:100,beginAtZero:true}}}});
+}
+
+function renderMoodChart(){
+  const dates=getDatesArray(statsPeriod);
+  const moodData=LS('mood',{});
+  const data=dates.map(d=>{const m=moodData[d];return m?m.mood+1:null;});
+  const energyData=dates.map(d=>{const m=moodData[d];return m?m.energy:null;});
+  destroyChart('mood');
+  const ctx=document.getElementById('chart-mood');if(!ctx)return;
+  chartInstances.mood=new Chart(ctx,{type:'line',data:{labels:dates.map(d=>d.slice(5)),
+    datasets:[
+      {label:'Hangulat',data,borderColor:CHART_COLORS.border,backgroundColor:CHART_COLORS.bg,fill:false,tension:.3,spanGaps:true},
+      {label:'Energia',data:energyData,borderColor:CHART_COLORS.border2,backgroundColor:CHART_COLORS.bg2,fill:false,tension:.3,spanGaps:true}
+    ]},options:{...chartDefaults(),plugins:{legend:{display:true,labels:{color:CHART_COLORS.text,font:{size:10}}}},
+    scales:{...chartDefaults().scales,y:{...chartDefaults().scales.y,min:0,max:5}}}});
+}
+
+function renderSleepChart(){
+  const dates=getDatesArray(statsPeriod);
+  const sleepData=getSleepData();
+  const data=dates.map(d=>{const s=sleepData[d];return s?s.duration:null;});
+  destroyChart('sleep');
+  const ctx=document.getElementById('chart-sleep');if(!ctx)return;
+  chartInstances.sleep=new Chart(ctx,{type:'bar',data:{labels:dates.map(d=>d.slice(5)),
+    datasets:[{data,backgroundColor:data.map(v=>v===null?'transparent':v>=8?CHART_COLORS.green:v>=7?CHART_COLORS.yellow:CHART_COLORS.red+'80'),
+      borderRadius:4}]},options:{...chartDefaults(),scales:{...chartDefaults().scales,y:{...chartDefaults().scales.y,min:0,max:12}}}});
+}
+
+function renderFinanceChart(){
+  const dates=getDatesArray(statsPeriod);
+  const items=getFinData();
+  // Aggregate by category for the period
+  const startDate=dates[0];
+  const periodItems=items.filter(i=>i.date>=startDate);
+  const catTotals={};
+  periodItems.forEach(i=>{catTotals[i.category]=(catTotals[i.category]||0)+i.amount;});
+  const labels=[];const data=[];const colors=[];
+  const catColors=['#ef4444','#3b82f6','#a855f7','#22c55e','#f59e0b','#06b6d4','#8b5cf6','#64748b'];
+  FIN_CATS.forEach((c,i)=>{
+    if(catTotals[c.id]){labels.push(c.icon+' '+c.name);data.push(catTotals[c.id]);colors.push(catColors[i]);}
+  });
+  destroyChart('finance');
+  const ctx=document.getElementById('chart-finance');if(!ctx)return;
+  if(data.length===0){ctx.parentElement.style.display='none';return;}
+  ctx.parentElement.style.display='block';
+  chartInstances.finance=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:CHART_COLORS.text,font:{size:10}}}}}});
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  EXTENDED ACHIEVEMENTS + AVATAR + BOSS FIGHT (Task 16)
+// ═══════════════════════════════════════════════════════════════════
+function updateAvatar(){
+  const p=loadSoloLocal();const[rank]=slRank(p.total_xp);
+  const av=AVATAR_MAP[rank]||'🐣';
+  const el=document.getElementById('hdr-avatar');
+  if(el)el.textContent=av;
+}
+
+function openAchList(){
+  document.getElementById('ach-overlay').classList.add('open');
+  const el=document.getElementById('ach-list');
+  const unlocked=LS('achievements',[]);
+  let h='';
+  ACHIEVEMENTS.forEach(a=>{
+    const isUnlocked=unlocked.includes(a.id);
+    h+='<div class="ach-item'+(isUnlocked?'':' locked')+'">';
+    h+='<div class="ach-icon">'+a.icon+'</div>';
+    h+='<div><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div>';
+    if(isUnlocked)h+='<div style="color:#22c55e;font-size:20px">✓</div>';
+    h+='</div>';
+  });
+  el.innerHTML=h;
+}
+function closeAchList(){document.getElementById('ach-overlay').classList.remove('open');}
+
+// Boss fight (Sundays)
+function checkBossFight(){
+  const wd=new Date().getDay();
+  if(wd!==0)return; // Only on Sundays
+  const tk=todayKey();
+  const bossData=LS('boss_fight',{});
+  if(bossData[tk])return; // Already shown/completed
+
+  // Show boss fight card before the solo card
+  const soloEl=document.getElementById('solo');
+  if(!soloEl)return;
+  const existing=document.getElementById('boss-card-el');
+  if(existing)return;
+
+  const bosses=[
+    {name:'SHADOW MONARCH',tasks:['200 fekvőtámasz','200 guggolás','5 km futás','30 perc meditáció','Hideg zuhany'],reward:500},
+    {name:'IRON GOLEM',tasks:['300 hasizom','100 burpee','10 km séta','2 óra tanulás'],reward:450},
+    {name:'DEMON KING',tasks:['150 fekvőtámasz','200 ugrókötél','50 burpee','Napló írás','Hideg zuhany'],reward:550}
+  ];
+  const boss=bosses[new Date().getDate()%bosses.length];
+
+  const card=document.createElement('div');
+  card.id='boss-card-el';card.className='boss-card';
+  let h='<div class="sys-hdr" style="color:#ef4444">[ ☠ HETI BOSS FIGHT ]</div>';
+  h+='<div class="boss-name">'+boss.name+'</div>';
+  h+='<div class="boss-reward">Jutalom: +'+boss.reward+' XP</div>';
+  boss.tasks.forEach((t,i)=>{
+    const chk=bossData[tk+'_'+i]?'checked disabled':'';
+    h+='<div class="task-check"><input type="checkbox" id="boss_'+i+'" '+chk+' onchange="checkBossTask('+i+',this.checked)"><label for="boss_'+i+'">'+t+'</label></div>';
+  });
+  h+='<button class="btn" style="color:#ef4444;border-color:#ef4444" onclick="completeBoss()" id="boss-complete-btn">[ ☠ BOSS LEGYŐZVE ]</button>';
+  card.innerHTML=h;
+  soloEl.parentElement.insertBefore(card,soloEl.parentElement.querySelector('.system-card'));
+}
+
+function checkBossTask(idx,checked){
+  const tk=todayKey();const data=LS('boss_fight',{});
+  data[tk+'_'+idx]=checked;LSset('boss_fight',data);
+}
+
+function completeBoss(){
+  const tk=todayKey();const data=LS('boss_fight',{});
+  if(data[tk])return;
+  data[tk]=true;LSset('boss_fight',data);
+  const bosses=[
+    {reward:500},{reward:450},{reward:550}
+  ];
+  const boss=bosses[new Date().getDate()%bosses.length];
+  const p=loadSoloLocal();p.total_xp+=boss.reward;LSset('solo',p);
+  showBanner('☠ BOSS LEGYŐZVE! +'+boss.reward+' XP');
+  const card=document.getElementById('boss-card-el');
+  if(card)card.remove();
+  renderSolo();checkAchievements();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  TÉMA RENDSZER (Task 14)
+// ═══════════════════════════════════════════════════════════════════
+function setTheme(name){
+  if(name==='dark'){document.documentElement.removeAttribute('data-theme');}
+  else{document.documentElement.setAttribute('data-theme',name);}
+  LSset('theme',name);
+  document.querySelectorAll('.theme-swatch').forEach(s=>s.classList.remove('selected'));
+  const themes=['dark','spotify','discord','netflix','cyber','mono','rose','dracula','nord','light'];
+  const idx=themes.indexOf(name);
+  const swatches=document.querySelectorAll('.theme-swatch');
+  if(swatches[idx])swatches[idx].classList.add('selected');
+  // Update meta theme-color
+  const cs=getComputedStyle(document.documentElement);
+  const bgColor=cs.getPropertyValue('--bg-deep').trim()||'#020a14';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content',bgColor);
+}
+
+function loadTheme(){
+  const theme=LS('theme','dark');
+  if(theme!=='dark')document.documentElement.setAttribute('data-theme',theme);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  PWA INSTALL PROMPT (Task 18)
+// ═══════════════════════════════════════════════════════════════════
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  const dismissed=LS('install_dismissed',false);
+  if(!dismissed)document.getElementById('install-banner').style.display='block';
+});
+
+function installPWA(){
+  if(!deferredPrompt)return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(r=>{
+    document.getElementById('install-banner').style.display='none';
+    deferredPrompt=null;
+  });
+}
+function dismissInstall(){
+  document.getElementById('install-banner').style.display='none';
+  LSset('install_dismissed',true);
+}
+
+// Napi login bonus
+function dailyLoginBonus(){
+  const tk=todayKey();
+  const lastLogin=LS('last_login','');
+  if(lastLogin===tk)return;
+  LSset('last_login',tk);
+  const p=loadSoloLocal();
+  let bonus=10;
+  const loginStreak=LS('login_streak',0);
+  const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+  const yk=yesterday.toISOString().slice(0,10);
+  let newStreak=1;
+  if(lastLogin===yk)newStreak=loginStreak+1;
+  LSset('login_streak',newStreak);
+  if(newStreak>=30)bonus=200;
+  else if(newStreak>=7)bonus=50;
+  p.total_xp=(p.total_xp||0)+bonus;
+  LSset('solo',p);
+  showBanner('🎁 Napi bónusz: +'+bonus+' XP'+(newStreak>1?' ('+newStreak+' napos sorozat)':''));
+}
+
+// ═══════════════════════════════════════════════════════════════════
 //  INDÍTÁS
 // ═══════════════════════════════════════════════════════════════════
 async function loadAll(){
+  loadTheme();
+  getPomoSettings();
+  pomoSeconds=pomoWorkDuration;
   showGreeting();
   await syncFromLaptop();
   await loadWeather();
   loadCal();loadTasks();loadRecurring();loadSolo();
+  loadSleep();loadMood();loadPomoMini();
   buildNewsTabs();
-  if(currentTab==='news')loadNews(currentNews);
+  updateAvatar();
+  // Handle URL tab param
+  const urlTab=new URLSearchParams(location.search).get('tab');
+  if(urlTab&&ALL_TABS.includes(urlTab))switchTab(urlTab);
+  else if(currentTab==='news')loadNews(currentNews);
   // Reggeli/esti összefoglaló megjelenítése ha aktuális
   setTimeout(showDailySummary,2000);
+  // Boss fight on Sundays
+  setTimeout(checkBossFight,1000);
+  // Daily bonuses and achievements
+  dailyLoginBonus();
+  setTimeout(()=>{checkAchievements();updateAvatar();},500);
 }
 loadAll();
 
