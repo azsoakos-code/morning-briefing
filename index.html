@@ -320,6 +320,27 @@ h1{font-size:18px;font-weight:800;color:var(--text-primary,#e0f2fe);letter-spaci
 .fin-add-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;
   background:rgba(0,0,0,.85);z-index:9998;padding:20px;overflow-y:auto}
 .fin-add-overlay.open{display:block}
+/* ── Finance inner tabs ── */
+.fin-tabs{display:flex;gap:0;margin-bottom:12px;background:var(--bg-deep,#020a14);border-radius:8px;padding:3px;border:1px solid var(--border,#0f2a50)}
+.fin-tab-btn{flex:1;background:transparent;color:var(--text-dim,#64748b);border:none;padding:8px 4px;font-size:11px;font-weight:700;cursor:pointer;border-radius:6px;transition:all .2s;letter-spacing:.5px}
+.fin-tab-btn.active{background:var(--blue,#2563eb);color:#fff}
+/* ── Fixed expense items ── */
+.fixed-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(15,42,80,0.4)}
+.fixed-item.inactive{opacity:.35}
+.fixed-icon{font-size:22px;width:32px;text-align:center;flex-shrink:0}
+.fixed-info{flex:1;min-width:0}
+.fixed-name{font-size:13px;font-weight:700;color:var(--text-primary,#e0f2fe);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fixed-meta{font-size:11px;color:var(--text-dim,#64748b);margin-top:1px}
+.fixed-amount{font-size:14px;font-weight:800;color:var(--text-primary,#e0f2fe);white-space:nowrap;margin-right:6px}
+.fixed-toggle{width:40px;height:22px;border-radius:11px;background:var(--bg-deep,#020a14);border:1px solid var(--border,#0f2a50);cursor:pointer;position:relative;flex-shrink:0;transition:background .2s}
+.fixed-toggle.on{background:var(--blue,#2563eb);border-color:var(--blue,#2563eb)}
+.fixed-toggle::after{content:'';width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.fixed-toggle.on::after{left:20px}
+.fixed-edit-btn{background:transparent;border:1px solid var(--border,#0f2a50);color:var(--text-dim,#64748b);border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer;flex-shrink:0}
+.fixed-summary-bar{background:var(--bg-accent,#0a1f3d);border-radius:10px;padding:12px;margin-bottom:12px}
+.fixed-summary-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0}
+.fixed-summary-label{font-size:11px;color:var(--text-dim,#64748b);letter-spacing:.5px}
+.fixed-summary-val{font-size:14px;font-weight:800;color:var(--text-primary,#e0f2fe)}
 /* ── Responsive ── */
 @media(min-width:768px){
   .main-content-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -490,14 +511,46 @@ h1{font-size:18px;font-weight:800;color:var(--text-primary,#e0f2fe);letter-spaci
 <!-- ═══ PÉNZTÁRCA FÜL ═══ -->
 <div id="tab-finance" style="display:none">
 <div class="card">
-  <div class="sec" style="display:flex;justify-content:space-between;align-items:center">
+  <div class="sec" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <span>💰 PÉNZTÁRCA</span>
-    <button onclick="openFinAdd()" style="background:transparent;border:1px solid #1e3a6e;color:#60a5fa;border-radius:6px;padding:2px 8px;font-size:10px;cursor:pointer">+ Új</button>
+    <div style="display:flex;gap:6px">
+      <button id="fin-add-var-btn" onclick="openFinAdd()" style="display:none;background:transparent;border:1px solid var(--border,#1e3a6e);color:var(--cyan,#60a5fa);border-radius:6px;padding:2px 8px;font-size:10px;cursor:pointer">+ Változó</button>
+      <button id="fin-add-fix-btn" onclick="openFixedAdd()" style="display:none;background:transparent;border:1px solid var(--border,#1e3a6e);color:var(--cyan,#60a5fa);border-radius:6px;padding:2px 8px;font-size:10px;cursor:pointer">+ Állandó</button>
+    </div>
   </div>
-  <div class="fin-summary" id="fin-summary"></div>
-  <div id="fin-budget"></div>
-  <div class="sec" style="margin-top:12px">UTOLSÓ KIADÁSOK</div>
-  <div id="fin-list"></div>
+  <div class="fin-tabs">
+    <button class="fin-tab-btn active" onclick="switchFinTab('summary')" id="ftab-summary">📊 Összesítés</button>
+    <button class="fin-tab-btn" onclick="switchFinTab('fixed')" id="ftab-fixed">📌 Állandó</button>
+    <button class="fin-tab-btn" onclick="switchFinTab('variable')" id="ftab-variable">💸 Változó</button>
+  </div>
+
+  <!-- Összesítés -->
+  <div id="fin-section-summary">
+    <div class="fin-summary" id="fin-summary"></div>
+    <div id="fin-budget"></div>
+  </div>
+
+  <!-- Állandó kiadások -->
+  <div id="fin-section-fixed" style="display:none">
+    <div class="fixed-summary-bar" id="fixed-summary-bar">
+      <div class="fixed-summary-row">
+        <span class="fixed-summary-label">AKTÍV ÁLLANDÓ / HÓ</span>
+        <span class="fixed-summary-val" id="fixed-active-total">0 Ft</span>
+      </div>
+      <div class="fixed-summary-row">
+        <span class="fixed-summary-label">INAKTÍV TÉTELEK</span>
+        <span class="fixed-summary-val" id="fixed-inactive-count" style="font-size:12px;color:var(--text-dim,#64748b)">0 db</span>
+      </div>
+    </div>
+    <div id="fixed-list"><div style="color:var(--text-muted,#334155);font-size:12px;padding:10px 0">Még nincs állandó kiadás. Adj hozzá egyet!</div></div>
+  </div>
+
+  <!-- Változó kiadások -->
+  <div id="fin-section-variable" style="display:none">
+    <div class="fin-summary" id="fin-summary-var"></div>
+    <div class="sec" style="margin-top:4px;margin-bottom:6px">UTOLSÓ KIADÁSOK</div>
+    <div id="fin-list"></div>
+  </div>
 </div>
 </div>
 
@@ -567,6 +620,24 @@ h1{font-size:18px;font-weight:800;color:var(--text-primary,#e0f2fe);letter-spaci
   <input type="date" id="fin-date">
   <button class="btn" onclick="saveExpense()" style="background:#062717;color:#22c55e;border-color:#16a34a">💾 Mentés</button>
   <button class="btn" onclick="closeFinAdd()" style="margin-top:8px;background:transparent;color:#64748b;border-color:#1e3a6e">Bezárás</button>
+</div>
+</div>
+
+<!-- ═══ ÁLLANDÓ KIADÁS SZERKESZTŐ ═══ -->
+<div class="fin-add-overlay" id="fixed-add-overlay">
+<div class="goal-edit-card">
+  <h2 id="fixed-edit-title">Új állandó kiadás</h2>
+  <label>MEGNEVEZÉS</label>
+  <input type="text" id="fixed-name" placeholder="pl. Albérlet, Netflix, Edzőterem">
+  <label>ÖSSZEG (HUF / hó)</label>
+  <input type="number" id="fixed-amount" placeholder="pl. 150000">
+  <label>KATEGÓRIA</label>
+  <div class="fin-cat-grid" id="fixed-cat-picker"></div>
+  <label>ESEDÉKESSÉG (hónap hányadikán, opcionális)</label>
+  <input type="number" id="fixed-day" min="1" max="31" placeholder="pl. 1">
+  <button class="btn" onclick="saveFixed()" style="background:#062717;color:#22c55e;border-color:#16a34a">💾 Mentés</button>
+  <button class="btn" id="fixed-del-btn" onclick="deleteFixed()" style="margin-top:8px;background:#1a0505;color:#ef4444;border-color:#7f1d1d;display:none">🗑 Törlés</button>
+  <button class="btn" onclick="closeFixedAdd()" style="margin-top:8px;background:transparent;color:#64748b;border-color:#1e3a6e">Bezárás</button>
 </div>
 </div>
 
@@ -675,6 +746,10 @@ const SL_RANKS=[[0,"E","#9ca3af","Gyenge Vadász"],[500,"D","#22c55e","Bronz Vad
 
 const ALL_TABS=['morning','news','stats','finance','goals'];
 const FIN_CATS=[{id:'food',icon:'🍔',name:'Étel'},{id:'transport',icon:'🚌',name:'Közlekedés'},{id:'fun',icon:'🎮',name:'Szórakozás'},{id:'shop',icon:'🛒',name:'Bevásárlás'},{id:'health',icon:'💊',name:'Egészség'},{id:'sub',icon:'📱',name:'Előfizetés'},{id:'learn',icon:'📚',name:'Tanulás'},{id:'other',icon:'❓',name:'Egyéb'}];
+const FIN_FIXED_CATS=[{id:'housing',icon:'🏠',name:'Lakás'},{id:'utilities',icon:'💡',name:'Rezsi'},{id:'phone',icon:'📱',name:'Telefon'},{id:'internet',icon:'🌐',name:'Internet'},{id:'subscription',icon:'🎬',name:'Előfizetés'},{id:'gym',icon:'🏋️',name:'Edzőterem'},{id:'transport',icon:'🚗',name:'Közlekedés'},{id:'health',icon:'💊',name:'Egészség'},{id:'insurance',icon:'🛡️',name:'Biztosítás'},{id:'other',icon:'💰',name:'Egyéb'}];
+let currentFinTab='summary';
+let editingFixedId=null;
+let selectedFixedCat='housing';
 const GOAL_EMOJIS=['💪','📚','💰','🎯','💼','🏃','🧠','❤️','🏠','✈️','🎨','🎵','📖','🌍','⭐'];
 const AVATAR_MAP={E:'🐣',D:'🐺',C:'⚔️',B:'🛡️',A:'👑',S:'💀',MONARCH:'👁️'};
 let currentNews=0, currentTab='morning', laptopAvailable=false;
@@ -1883,17 +1958,43 @@ function updatePomoFull(){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  PÉNZÜGYI TRACKER (Task 10)
+//  PÉNZÜGYI TRACKER — Állandó + Változó kiadások
 // ═══════════════════════════════════════════════════════════════════
 let selectedFinCat='food';
 
 function getFinData(){return LS('finance',[]);}
 function getFinSettings(){return{budget:LS('fin_budget',200000),daily_limit:LS('fin_daily_limit',10000)};}
+function getFixedData(){return LS('fin_fixed',[]);}
+function setFixedData(d){LSset('fin_fixed',d);}
 
-function loadFinance(){
-  renderFinSummary();renderFinBudget();renderFinList();
+// Aktív állandó kiadások havi összege
+function getFixedMonthTotal(){return getFixedData().filter(f=>f.active!==false).reduce((s,f)=>s+f.amount,0);}
+
+// ── Belső tab váltás ──────────────────────────────────────────────
+function switchFinTab(tab){
+  currentFinTab=tab;
+  ['summary','fixed','variable'].forEach(t=>{
+    const sec=document.getElementById('fin-section-'+t);
+    const btn=document.getElementById('ftab-'+t);
+    if(sec)sec.style.display=t===tab?'':'none';
+    if(btn){btn.classList.toggle('active',t===tab);}
+  });
+  // + gomb mutatása a megfelelő tab-on
+  const varBtn=document.getElementById('fin-add-var-btn');
+  const fixBtn=document.getElementById('fin-add-fix-btn');
+  if(varBtn)varBtn.style.display=tab==='variable'?'':'none';
+  if(fixBtn)fixBtn.style.display=tab==='fixed'?'':'none';
+  // tartalom betöltése
+  if(tab==='summary'){renderFinSummary();renderFinBudget();}
+  else if(tab==='fixed'){renderFixedList();}
+  else if(tab==='variable'){renderFinSummaryVar();renderFinList();}
 }
 
+function loadFinance(){
+  switchFinTab(currentFinTab||'summary');
+}
+
+// ── ÖSSZESÍTÉS TAB ────────────────────────────────────────────────
 function renderFinSummary(){
   const el=document.getElementById('fin-summary');if(!el)return;
   const items=getFinData();const tk=todayKey();
@@ -1903,43 +2004,79 @@ function renderFinSummary(){
   const wk=weekStart.toISOString().slice(0,10);
   const weekTotal=items.filter(i=>i.date>=wk).reduce((s,i)=>s+i.amount,0);
   const monthKey=tk.slice(0,7);
-  const monthTotal=items.filter(i=>i.date.startsWith(monthKey)).reduce((s,i)=>s+i.amount,0);
+  const varMonth=items.filter(i=>i.date.startsWith(monthKey)).reduce((s,i)=>s+i.amount,0);
+  const fixedMonth=getFixedMonthTotal();
+  const totalMonth=varMonth+fixedMonth;
   const settings=getFinSettings();
-  const dailyColor=todayTotal>settings.daily_limit?'#ef4444':'#e0f2fe';
-  el.innerHTML='<div class="fin-box"><div class="fin-amount" style="color:'+dailyColor+'">'+todayTotal.toLocaleString()+' Ft</div><div class="fin-label">MA</div></div>'+
-    '<div class="fin-box"><div class="fin-amount">'+weekTotal.toLocaleString()+' Ft</div><div class="fin-label">E HÉT</div></div>'+
-    '<div class="fin-box"><div class="fin-amount">'+monthTotal.toLocaleString()+' Ft</div><div class="fin-label">E HÓNAP</div></div>'+
-    '<div class="fin-box"><div class="fin-amount" style="color:#22c55e">'+(settings.budget-monthTotal).toLocaleString()+' Ft</div><div class="fin-label">MARADÉK</div></div>';
+  const remaining=settings.budget-totalMonth;
+  const remColor=remaining<0?'#ef4444':'#22c55e';
+  const dailyColor=todayTotal>settings.daily_limit?'#ef4444':'var(--text-primary,#e0f2fe)';
+  el.innerHTML=
+    '<div class="fin-box"><div class="fin-amount" style="color:'+dailyColor+'">'+todayTotal.toLocaleString()+' Ft</div><div class="fin-label">MA</div></div>'+
+    '<div class="fin-box"><div class="fin-amount">'+fixedMonth.toLocaleString()+' Ft</div><div class="fin-label">ÁLLANDÓ / HÓ</div></div>'+
+    '<div class="fin-box"><div class="fin-amount">'+varMonth.toLocaleString()+' Ft</div><div class="fin-label">VÁLTOZÓ / HÓ</div></div>'+
+    '<div class="fin-box"><div class="fin-amount" style="color:'+remColor+'">'+remaining.toLocaleString()+' Ft</div><div class="fin-label">MARADÉK</div></div>';
 }
 
 function renderFinBudget(){
   const el=document.getElementById('fin-budget');if(!el)return;
   const items=getFinData();const tk=todayKey();const monthKey=tk.slice(0,7);
-  const monthTotal=items.filter(i=>i.date.startsWith(monthKey)).reduce((s,i)=>s+i.amount,0);
+  const varMonth=items.filter(i=>i.date.startsWith(monthKey)).reduce((s,i)=>s+i.amount,0);
+  const fixedMonth=getFixedMonthTotal();
+  const totalMonth=varMonth+fixedMonth;
   const settings=getFinSettings();
-  const pct=Math.min(100,Math.round(monthTotal/settings.budget*100));
+  const pct=Math.min(100,Math.round(totalMonth/settings.budget*100));
   const color=pct>90?'#ef4444':pct>70?'#f59e0b':'#22c55e';
-  // Forecast
   const dayOfMonth=new Date().getDate();
   const daysInMonth=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
-  const forecast=dayOfMonth>0?Math.round(monthTotal/dayOfMonth*daysInMonth):0;
-  el.innerHTML='<div style="font-size:10px;color:#334155;margin-bottom:4px">HAVI BUDGET: '+settings.budget.toLocaleString()+' Ft ('+pct+'%)</div>'+
+  const varForecast=dayOfMonth>0?Math.round(varMonth/dayOfMonth*daysInMonth):0;
+  const forecast=fixedMonth+varForecast;
+  el.innerHTML=
+    '<div style="font-size:10px;color:var(--text-muted,#334155);margin-bottom:4px">HAVI BUDGET: '+settings.budget.toLocaleString()+' Ft ('+pct+'%)</div>'+
     '<div class="fin-budget-bar"><div class="fin-budget-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'+
-    '<div style="font-size:10px;color:#64748b">Előrejelzés hó végéig: <span style="color:'+(forecast>settings.budget?'#ef4444':'#22c55e')+'">'+forecast.toLocaleString()+' Ft</span></div>';
+    '<div style="font-size:10px;color:var(--text-dim,#64748b);margin-bottom:4px">Állandó: <b>'+fixedMonth.toLocaleString()+' Ft</b> + Változó: <b>'+varMonth.toLocaleString()+' Ft</b></div>'+
+    '<div style="font-size:10px;color:var(--text-dim,#64748b)">Előrejelzés hó végéig: <span style="color:'+(forecast>settings.budget?'#ef4444':'#22c55e')+'">'+forecast.toLocaleString()+' Ft</span></div>';
+}
+
+// ── VÁLTOZÓ TAB ───────────────────────────────────────────────────
+function renderFinSummaryVar(){
+  const el=document.getElementById('fin-summary-var');if(!el)return;
+  const items=getFinData();const tk=todayKey();
+  const now=new Date();
+  const todayTotal=items.filter(i=>i.date===tk).reduce((s,i)=>s+i.amount,0);
+  const weekStart=new Date(now);weekStart.setDate(now.getDate()-now.getDay()+1);
+  const wk=weekStart.toISOString().slice(0,10);
+  const weekTotal=items.filter(i=>i.date>=wk).reduce((s,i)=>s+i.amount,0);
+  const monthKey=tk.slice(0,7);
+  const monthTotal=items.filter(i=>i.date.startsWith(monthKey)).reduce((s,i)=>s+i.amount,0);
+  const settings=getFinSettings();
+  const dailyColor=todayTotal>settings.daily_limit?'#ef4444':'var(--text-primary,#e0f2fe)';
+  el.innerHTML=
+    '<div class="fin-box"><div class="fin-amount" style="color:'+dailyColor+'">'+todayTotal.toLocaleString()+' Ft</div><div class="fin-label">MA</div></div>'+
+    '<div class="fin-box"><div class="fin-amount">'+weekTotal.toLocaleString()+' Ft</div><div class="fin-label">E HÉT</div></div>'+
+    '<div class="fin-box"><div class="fin-amount">'+monthTotal.toLocaleString()+' Ft</div><div class="fin-label">E HÓNAP</div></div>'+
+    '<div class="fin-box"><div class="fin-amount">'+settings.daily_limit.toLocaleString()+' Ft</div><div class="fin-label">NAPI LIMIT</div></div>';
 }
 
 function renderFinList(){
   const el=document.getElementById('fin-list');if(!el)return;
-  const items=getFinData().sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,30);
-  if(items.length===0){el.innerHTML='<div style="color:#334155;font-size:12px;padding:10px 0">Nincs kiadás</div>';return;}
+  const items=getFinData().sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,40);
+  if(items.length===0){el.innerHTML='<div style="color:var(--text-muted,#334155);font-size:12px;padding:10px 0">Nincs változó kiadás. Adj hozzá egyet!</div>';return;}
   let h='';let lastDate='';
   items.forEach(i=>{
-    if(i.date!==lastDate){h+='<div style="color:#2563eb;font-size:10px;font-weight:700;margin-top:8px">'+i.date+'</div>';lastDate=i.date;}
+    if(i.date!==lastDate){h+='<div style="color:var(--blue,#2563eb);font-size:10px;font-weight:700;margin-top:8px;margin-bottom:2px">'+i.date+'</div>';lastDate=i.date;}
     const cat=FIN_CATS.find(c=>c.id===i.category)||FIN_CATS[7];
-    h+='<div class="fin-item"><div><span class="fin-item-cat">'+cat.icon+'</span>'+
+    h+='<div class="fin-item" onclick="deleteExpensePrompt('+i.id+')" style="cursor:pointer"><div><span class="fin-item-cat">'+cat.icon+'</span>'+
       (i.note||cat.name)+'</div><div style="color:#ef4444;font-weight:700">-'+i.amount.toLocaleString()+' Ft</div></div>';
   });
   el.innerHTML=h;
+}
+
+function deleteExpensePrompt(id){
+  if(!confirm('Töröljük ezt a kiadást?'))return;
+  const items=getFinData().filter(i=>i.id!==id);
+  LSset('finance',items);renderFinList();renderFinSummaryVar();renderFinSummary();renderFinBudget();
+  showBanner('🗑 Kiadás törölve!');
 }
 
 function openFinAdd(){
@@ -1948,19 +2085,18 @@ function openFinAdd(){
   document.getElementById('fin-note').value='';
   document.getElementById('fin-date').value=todayKey();
   selectedFinCat='food';
-  const picker=document.getElementById('fin-cat-picker');
-  picker.innerHTML='';
+  const picker=document.getElementById('fin-cat-picker');picker.innerHTML='';
   FIN_CATS.forEach(c=>{
-    picker.innerHTML+='<div class="fin-cat-btn'+(c.id===selectedFinCat?' selected':'')+'" onclick="selectFinCat(\''+c.id+'\')">'+c.icon+'<br>'+c.name+'</div>';
+    picker.innerHTML+='<div class="fin-cat-btn'+(c.id==='food'?' selected':'')+'" onclick="selectFinCat(\''+c.id+'\')">'+c.icon+'<br>'+c.name+'</div>';
   });
 }
 function closeFinAdd(){document.getElementById('fin-add-overlay').classList.remove('open');}
 
 function selectFinCat(id){
   selectedFinCat=id;
-  document.querySelectorAll('.fin-cat-btn').forEach(b=>b.classList.remove('selected'));
-  const btns=document.querySelectorAll('.fin-cat-btn');
-  FIN_CATS.forEach((c,i)=>{if(c.id===id&&btns[i])btns[i].classList.add('selected');});
+  document.querySelectorAll('#fin-cat-picker .fin-cat-btn').forEach((b,i)=>{
+    b.classList.toggle('selected',FIN_CATS[i]&&FIN_CATS[i].id===id);
+  });
 }
 
 function saveExpense(){
@@ -1973,6 +2109,104 @@ function saveExpense(){
   LSset('finance',items);
   closeFinAdd();loadFinance();showBanner('💰 Kiadás mentve!');
 }
+
+// ── ÁLLANDÓ KIADÁSOK TAB ──────────────────────────────────────────
+function renderFixedList(){
+  const fixed=getFixedData();
+  // totál
+  const activeTotal=fixed.filter(f=>f.active!==false).reduce((s,f)=>s+f.amount,0);
+  const inactiveCount=fixed.filter(f=>f.active===false).length;
+  const atEl=document.getElementById('fixed-active-total');
+  const icEl=document.getElementById('fixed-inactive-count');
+  if(atEl)atEl.textContent=activeTotal.toLocaleString()+' Ft';
+  if(icEl)icEl.textContent=inactiveCount+' db';
+  // lista
+  const el=document.getElementById('fixed-list');if(!el)return;
+  if(fixed.length===0){el.innerHTML='<div style="color:var(--text-muted,#334155);font-size:12px;padding:10px 0">Még nincs állandó kiadás. Adj hozzá egyet a + gombbal!</div>';return;}
+  const sorted=[...fixed].sort((a,b)=>(b.active!==false?1:0)-(a.active!==false?1:0)||(b.amount-a.amount));
+  let h='';
+  sorted.forEach(f=>{
+    const cat=FIN_FIXED_CATS.find(c=>c.id===f.category)||FIN_FIXED_CATS[9];
+    const isOn=f.active!==false;
+    h+='<div class="fixed-item'+(isOn?'':' inactive')+'">';
+    h+='<div class="fixed-icon">'+cat.icon+'</div>';
+    h+='<div class="fixed-info"><div class="fixed-name">'+escHtml(f.name)+'</div>';
+    h+='<div class="fixed-meta">'+cat.name+(f.day?' · '+f.day+'-jén':'')+'</div></div>';
+    h+='<div class="fixed-amount">'+f.amount.toLocaleString()+' Ft</div>';
+    h+='<div class="fixed-toggle'+(isOn?' on':'')+'" onclick="toggleFixed('+f.id+')" title="Aktív/Inaktív"></div>';
+    h+='<button class="fixed-edit-btn" onclick="openFixedAdd('+f.id+')">✏️</button>';
+    h+='</div>';
+  });
+  el.innerHTML=h;
+}
+
+function toggleFixed(id){
+  const fixed=getFixedData();
+  const f=fixed.find(x=>x.id===id);if(!f)return;
+  f.active=f.active===false;// false→true, else→false
+  setFixedData(fixed);renderFixedList();renderFinSummary();renderFinBudget();
+}
+
+function openFixedAdd(id){
+  editingFixedId=id||null;
+  const overlay=document.getElementById('fixed-add-overlay');overlay.classList.add('open');
+  document.getElementById('fixed-edit-title').textContent=id?'Állandó kiadás szerkesztése':'Új állandó kiadás';
+  document.getElementById('fixed-del-btn').style.display=id?'block':'none';
+  selectedFixedCat='housing';
+  // picker
+  const picker=document.getElementById('fixed-cat-picker');picker.innerHTML='';
+  if(id){
+    const f=getFixedData().find(x=>x.id===id);
+    if(f){
+      document.getElementById('fixed-name').value=f.name||'';
+      document.getElementById('fixed-amount').value=f.amount||'';
+      document.getElementById('fixed-day').value=f.day||'';
+      selectedFixedCat=f.category||'housing';
+    }
+  } else {
+    document.getElementById('fixed-name').value='';
+    document.getElementById('fixed-amount').value='';
+    document.getElementById('fixed-day').value='';
+  }
+  FIN_FIXED_CATS.forEach(c=>{
+    picker.innerHTML+='<div class="fin-cat-btn'+(c.id===selectedFixedCat?' selected':'')+'" onclick="selectFixedCat(\''+c.id+'\')">'+c.icon+'<br>'+c.name+'</div>';
+  });
+}
+function closeFixedAdd(){document.getElementById('fixed-add-overlay').classList.remove('open');}
+
+function selectFixedCat(id){
+  selectedFixedCat=id;
+  document.querySelectorAll('#fixed-cat-picker .fin-cat-btn').forEach((b,i)=>{
+    b.classList.toggle('selected',FIN_FIXED_CATS[i]&&FIN_FIXED_CATS[i].id===id);
+  });
+}
+
+function saveFixed(){
+  const name=document.getElementById('fixed-name').value.trim();
+  const amount=parseInt(document.getElementById('fixed-amount').value);
+  const day=parseInt(document.getElementById('fixed-day').value)||null;
+  if(!name){showBanner('⚠ Adj meg egy nevet!');return;}
+  if(!amount||amount<=0){showBanner('⚠ Adj meg egy összeget!');return;}
+  const fixed=getFixedData();
+  if(editingFixedId){
+    const idx=fixed.findIndex(f=>f.id===editingFixedId);
+    if(idx>-1){fixed[idx]={...fixed[idx],name,amount,category:selectedFixedCat,day};}
+  } else {
+    fixed.push({id:Date.now(),name,amount,category:selectedFixedCat,day,active:true});
+  }
+  setFixedData(fixed);closeFixedAdd();renderFixedList();renderFinSummary();renderFinBudget();
+  showBanner(editingFixedId?'✏️ Állandó kiadás frissítve!':'📌 Állandó kiadás hozzáadva!');
+}
+
+function deleteFixed(){
+  if(!editingFixedId)return;
+  if(!confirm('Töröljük ezt az állandó kiadást?'))return;
+  setFixedData(getFixedData().filter(f=>f.id!==editingFixedId));
+  closeFixedAdd();renderFixedList();renderFinSummary();renderFinBudget();
+  showBanner('🗑 Állandó kiadás törölve!');
+}
+
+function escHtml(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 // ═══════════════════════════════════════════════════════════════════
 //  CÉLOK RENDSZER (Task 12)
